@@ -1,0 +1,31 @@
+{
+  "run": {
+    "date": "2026-09-29T15:19:01Z",
+    "target": "staging-settings",
+    "command": "cre workflow simulate domain-verify --target staging-settings",
+    "result": "SUCCESS"
+  },
+  "verificationRecord": {
+    "protocol": "BlockDNS",
+    "version": "1.0.0",
+    "name": "demouplk",
+    "chain": "base-sepolia",
+    "registry": "0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1",
+    "tokenId": "1",
+    "onchainOwner": "0x953baa88c280df9e59c149bc5ab9b9ec64e45323",
+    "ownerMatched": true,
+    "external": {
+      "gitHub": {
+        "exists": true,
+        "stars": 3,
+        "forks": 3
+      },
+      "legacyDNS": {
+        "target": "demouplk.bdns.live",
+        "status": "3",
+        "recordFree": true
+      }
+    },
+    "verified": true
+  }
+}
