@@ -65,7 +65,7 @@ BlockDNS answers each with an immutable, clause-grade record:
 - [x] Title: `BlockDNS — rent-free, evidence-grade on-chain naming`
 - [x] Category: Crypto/Web3 + key domains NFT/DeFi/Infra/L2/Tokenomics
 - [x] Tags: #DNS #identity #proof-of-ownership #legaltech #base
-- [ ] Video: 2-min demo (VISIBILITY-KIT §7 script) — add via Manage Submission before judging
+- [x] Video: 2-min demo shots: `https://youtu.be/v9GkrC4hxd4` (CRE domain-verify simulation) — ADDED 2026-09-29; still editable via Manage Submission until judging
 - [x] Repo: `github.com/blockdns1-arch/blockdns` LIVE (150 files) — topics 12 incl. `legaltech,identity,web3`
 - [x] Links section: repo + socials (t.me/BlockDnsL2, x.com/BlockDnsL2)
 - [ ] Questions: mention admissibility/evidence framing + IPFS provenance
