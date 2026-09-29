@@ -66,7 +66,7 @@ BlockDNS answers each with an immutable, clause-grade record:
 - [ ] Category: BLOCKCHAIN / LEGAL TECH / IDENTITY (tick all offered)
 - [ ] Tags: #DNS #identity #proof-of-ownership #legaltech #base
 - [ ] Video: 2-min demo (VISIBILITY-KIT §7 script)
-- [ ] Repo: `github.com/<owner>/blockdns` — set topics `legaltech,web3,identity`
+- [x] Repo: `github.com/blockdns1-arch/blockdns` LIVE (150 files) — topics 12 incl. `legaltech,identity,web3`
 - [ ] Links section: past SIGN TX, repo, deployer wallet `0x953B...E45323`
 - [ ] Questions: mention admissibility/evidence framing + IPFS provenance
 - [ ] Submit BEFORE **Nov 1 2026** (local organizer deadline)
