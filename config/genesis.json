@@ -1,0 +1,126 @@
+{
+  "meta": {
+    "name": "BlockDNS L2",
+    "network": "blockdns-mainnet",
+    "version": "1.0.0",
+    "chainId": 8461,
+    "blockTimeSeconds": 1
+  },
+  "config": {
+    "chainId": 8461,
+    "homesteadBlock": 0,
+    "eip150Block": 0,
+    "eip155Block": 0,
+    "eip158Block": 0,
+    "byzantiumBlock": 0,
+    "constantinopleBlock": 0,
+    "petersburgBlock": 0,
+    "istanbulBlock": 0,
+    "berlinBlock": 0,
+    "londonBlock": 0,
+    "arrowGlacierBlock": 0,
+    "grayGlacierBlock": 0,
+    "shanghaiTime": 0,
+    "cancunTime": 0,
+    "terminalTotalDifficulty": 0,
+    "terminalTotalDifficultyPassed": true,
+    "ethash": null,
+    "clique": null
+  },
+  "consensus": {
+    "type": "proof-of-stake",
+    "blockTimeSeconds": 1,
+    "slotDurationSeconds": 1,
+    "epochLengthSlots": 32,
+    "finalityDelaySlots": 2,
+    "minValidatorStakeWei": "0x6C6B935B8BBD4000000",
+    "unbondingPeriodSeconds": 604800,
+    "initialValidators": [
+      {
+        "consensusAddress": "0x1111111111111111111111111111111111111111",
+        "feeRecipient": "0x1111111111111111111111111111111111111111",
+        "stakeWei": "0x6C6B935B8BBD4000000"
+      },
+      {
+        "consensusAddress": "0x2222222222222222222222222222222222222222",
+        "feeRecipient": "0x2222222222222222222222222222222222222222",
+        "stakeWei": "0x6C6B935B8BBD4000000"
+      },
+      {
+        "consensusAddress": "0x3333333333333333333333333333333333333333",
+        "feeRecipient": "0x3333333333333333333333333333333333333333",
+        "stakeWei": "0x6C6B935B8BBD4000000"
+      }
+    ]
+  },
+  "gas": {
+    "gasLimitWei": "0x1C9C380",
+    "baseFeePerGasWei": "0xF4240",
+    "minBaseFeeWei": "0x186A0",
+    "maxBaseFeeWei": "0x3B9ACA00",
+    "elasticityMultiplier": 2,
+    "baseFeeChangeDenominator": 8,
+    "txGasCapWei": "0xE4E1C0",
+    "blockGasLimitPerSecondWei": "0x1C9C380",
+    "l1DataFeeEnabled": false
+  },
+  "bdns": {
+    "name": "BlockDNS",
+    "symbol": "BDNS",
+    "decimals": 18,
+    "gasToken": true,
+    "capWei": "0x33B2E3C9FD0803CE8000000",
+    "initialSupplyWei": "0x0",
+    "predeploy": "0x420000000000000000000000000000000000000B",
+    "admin": "0x3333333333333333333333333333333333333333"
+  },
+  "predeploys": [
+    {
+      "name": "BDNS",
+      "address": "0x420000000000000000000000000000000000000B",
+      "artifact": "contracts/BDNS.sol:BDNS",
+      "constructorArgs": {
+        "cap": "0x33B2E3C9FD0803CE8000000",
+        "admin": "0x3333333333333333333333333333333333333333"
+      }
+    },
+    {
+      "name": "L2CrossDomainMessenger",
+      "address": "0x4200000000000000000000000000000000000007",
+      "artifact": "contracts/messaging/L2CrossDomainMessenger.sol:L2CrossDomainMessenger",
+      "initialize": {
+        "admin": "0x3333333333333333333333333333333333333333",
+        "remote": ""
+      }
+    }
+  ],
+  "genesis": {
+    "timestamp": "0x6AB1B6F0",
+    "gasLimit": "0x1C9C380",
+    "difficulty": "0x0",
+    "nonce": "0x0",
+    "mixHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "coinbase": "0x0000000000000000000000000000000000000000",
+    "extraData": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "baseFeePerGas": "0xF4240",
+    "alloc": {
+      "0x1111111111111111111111111111111111111111": {
+        "balance": "0x152D02C7E14AF6800000"
+      },
+      "0x2222222222222222222222222222222222222222": {
+        "balance": "0x152D02C7E14AF6800000"
+      },
+      "0x3333333333333333333333333333333333333333": {
+        "balance": "0x152D02C7E14AF6800000"
+      },
+      "0x4200000000000000000000000000000000000042": {
+        "balance": "0x0D3C21BCECCEDA1000000"
+      }
+    }
+  },
+  "l1": {
+    "chainId": 11155111,
+    "L1CrossDomainMessenger": "",
+    "messengerRelayer": ""
+  }
+}

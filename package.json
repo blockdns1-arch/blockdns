@@ -1,0 +1,42 @@
+{
+  "name": "blockdns-contracts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "hardhat compile",
+    "clean": "hardhat clean",
+    "test": "hardhat test",
+    "deploy": "hardhat run scripts/deploy.ts",
+    "deploy:l1": "hardhat run scripts/deploy.ts --network l1",
+    "deploy:l2": "hardhat run scripts/deploy.ts --network l2",
+    "deploy:phase2": "hardhat run scripts/deploy-phase2.ts",
+    "deploy:tokenomics": "hardhat run scripts/deploy-tokenomics.ts",
+    "merkle:generate": "hardhat run scripts/generate-merkle.ts",
+    "link": "hardhat run scripts/link-messengers.ts",
+    "social:help": "node social-agent/social-agent.js --help",
+    "social:self-test": "node social-agent/social-agent.js --self-test",
+    "social:once": "node social-agent/social-agent.js --once",
+    "social:daemon": "node social-agent/social-agent.js --daemon",
+    "social:test:telegram": "node social-agent/social-agent.js --ping telegram",
+    "social:test:twitter": "node social-agent/social-agent.js --ping twitter",
+    "social:test:meta": "node social-agent/social-agent.js --ping meta",
+    "watch:events": "hardhat run scripts/watch-events.ts --network l2",
+    "watch:events:local": "hardhat run scripts/watch-events.ts --network hardhat",
+    "pdf:whitepaper": "node scripts/generate-whitepaper-pdf.js"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "5.1.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.8",
+    "@nomicfoundation/hardhat-ethers": "^3.0.8",
+    "@types/chai": "^4.3.20",
+    "@types/node": "^22.10.2",
+    "chai": "^4.5.0",
+    "dotenv": "^16.4.7",
+    "ethers": "^6.13.5",
+    "hardhat": "^2.22.17",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
+}

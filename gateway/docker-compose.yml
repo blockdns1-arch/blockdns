@@ -1,0 +1,49 @@
+services:
+  gateway:
+    build: .
+    container_name: blockdns-gateway
+    environment:
+      - PORT=8080
+      - L2_RPC_URL=${L2_RPC_URL:-http://host.docker.internal:9545}
+      - L2_CHAIN_ID=${L2_CHAIN_ID:-8461}
+      - REGISTRY_ADDRESS=${REGISTRY_ADDRESS:?set REGISTRY_ADDRESS to the BlockDNS Registry contract}
+      - RESOLVER_ADDRESS=${RESOLVER_ADDRESS:-}
+      - ALLOWED_HOST_SUFFIXES=${ALLOWED_HOST_SUFFIXES:-.bdns.link,.bdns}
+      - CACHE_TTL_SECONDS=${CACHE_TTL_SECONDS:-60}
+      - REDIS_URL=redis://redis:6379
+      - IPFS_GATEWAYS=${IPFS_GATEWAYS:-http://ipfs:8080,https://cloudflare-ipfs.com,https://gateway.pinata.cloud}
+      - GATEWAY_CONSENSUS=${GATEWAY_CONSENSUS:-true}
+      - STRICT_CID_VERIFY=${STRICT_CID_VERIFY:-true}
+      - MAX_CONTENT_BYTES=${MAX_CONTENT_BYTES:-20971520}
+      - REQUEST_TIMEOUT_MS=${REQUEST_TIMEOUT_MS:-8000}
+      - APEX_REDIRECT_URL=${APEX_REDIRECT_URL:-https://blockdns.io}
+    ports:
+      - "${GATEWAY_PORT:-80}:8080"
+    depends_on:
+      - redis
+      - ipfs
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: blockdns-redis
+    command: ["redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+    restart: unless-stopped
+    volumes:
+      - redis-data:/data
+
+  ipfs:
+    image: ipfs/kubo:latest
+    container_name: blockdns-ipfs
+    environment:
+      - IPFS_PROFILE=server
+    command: ["daemon", "--migrate=true"]
+    restart: unless-stopped
+    volumes:
+      - ipfs-data:/data/ipfs
+      - ipfs-staging:/export
+
+volumes:
+  redis-data:
+  ipfs-data:
+  ipfs-staging:

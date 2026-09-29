@@ -1,0 +1,373 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --theme-violet: #5964ff;
+  --theme-cyan: #22d3ee;
+  --bg: #0a0a0c;
+  --head: #f4f4f5;
+  --muted: #a1a1aa;
+  --faint: #52525b;
+  --card-bg1: rgba(255, 255, 255, 0.045);
+  --card-bg2: rgba(255, 255, 255, 0.015);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 14px 42px -18px rgba(0, 0, 0, 0.55);
+  --hover-border: rgba(144, 152, 255, 0.4);
+  --hover-shadow: 0 18px 46px -16px rgba(89, 100, 255, 0.3);
+  --rule: rgba(255, 255, 255, 0.06);
+  --table-head-bg: rgba(255, 255, 255, 0.02);
+  --row-hover: rgba(255, 255, 255, 0.025);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --surface: rgba(255, 255, 255, 0.045);
+  --sel: rgba(89, 100, 255, 0.4);
+  --thumb: #3f3f46;
+  --accent-soft: #b6bdff;
+}
+
+html.light {
+  color-scheme: light;
+  --bg: #f4f5f7;
+  --head: #18181b;
+  --muted: #5d6778;
+  --faint: #8a8a94;
+  --card-bg1: rgba(255, 255, 255, 0.92);
+  --card-bg2: rgba(255, 255, 255, 0.6);
+  --card-border: rgba(24, 24, 27, 0.12);
+  --card-shadow: 0 12px 32px -18px rgba(24, 24, 27, 0.28);
+  --hover-border: rgba(89, 100, 255, 0.5);
+  --hover-shadow: 0 16px 40px -18px rgba(89, 100, 255, 0.28);
+  --rule: rgba(24, 24, 27, 0.1);
+  --table-head-bg: rgba(24, 24, 27, 0.025);
+  --row-hover: rgba(24, 24, 27, 0.03);
+  --grid-line: rgba(24, 24, 27, 0.06);
+  --surface: rgba(255, 255, 255, 0.7);
+  --sel: rgba(89, 100, 255, 0.25);
+  --thumb: #b8bcc4;
+}
+
+body {
+  background:
+    radial-gradient(1100px 560px at 18% -8%, rgba(89, 100, 255, 0.16), transparent 62%),
+    radial-gradient(900px 480px at 88% 0%, rgba(34, 211, 238, 0.09), transparent 60%),
+    radial-gradient(700px 500px at 55% 110%, rgba(124, 58, 237, 0.08), transparent 60%),
+    var(--bg);
+  color: var(--head);
+}
+
+html.light body {
+  background:
+    radial-gradient(1100px 560px at 18% -8%, rgba(89, 100, 255, 0.14), transparent 62%),
+    radial-gradient(900px 480px at 88% 0%, rgba(34, 211, 238, 0.1), transparent 60%),
+    radial-gradient(700px 500px at 55% 110%, rgba(124, 58, 237, 0.08), transparent 60%),
+    var(--bg);
+}
+
+::selection {
+  background: var(--sel);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--thumb);
+  border-radius: 8px;
+}
+
+/* ethereum.org-style hero backdrop: subtle grid + radial veil */
+.eth-hero-bg {
+  position: relative;
+  isolation: isolate;
+}
+.eth-hero-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 62% at 50% 0%, black, transparent 78%);
+  mask-image: radial-gradient(ellipse 80% 62% at 50% 0%, black, transparent 78%);
+}
+
+/* cards in the ethereum.org spirit: soft surface, hairline top highlight */
+.eth-card {
+  border-radius: 1.25rem;
+  border: 1px solid var(--card-border);
+  background: linear-gradient(
+    180deg,
+    var(--card-bg1),
+    var(--card-bg2) 55%
+  );
+  box-shadow: var(--card-shadow);
+}
+.eth-card-hover {
+  transition:
+    transform 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+.eth-card-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--hover-border);
+  box-shadow: var(--hover-shadow);
+}
+
+/* "hack the four corners" link treatment */
+.eth-corners {
+  position: relative;
+  transition: transform 0.18s ease;
+}
+.eth-corners::before,
+.eth-corners::after {
+  content: "";
+  position: absolute;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  pointer-events: none;
+}
+.eth-corners::before {
+  top: -0.375rem;
+  left: -0.375rem;
+  border-top-color: var(--theme-violet);
+  border-left-color: var(--theme-violet);
+  opacity: 0;
+}
+.eth-corners::after {
+  bottom: -0.375rem;
+  right: -0.375rem;
+  border-bottom-color: var(--theme-cyan);
+  border-right-color: var(--theme-cyan);
+  opacity: 0;
+}
+.eth-corners:hover {
+  transform: translateY(-2px);
+}
+.eth-corners:hover::before,
+.eth-corners:hover::after {
+  opacity: 1;
+}
+
+/* pill buttons */
+.eth-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+.eth-btn:active {
+  transform: scale(0.97);
+}
+
+/* underlined links, ethereum.org style */
+.eth-link {
+  color: var(--accent-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+  transition: text-decoration-color 0.15s ease;
+}
+.eth-link:hover {
+  text-decoration-color: var(--accent-soft);
+}
+
+/* blockchain.com-style explorer tables */
+.eth-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+  color: var(--head);
+}
+.eth-table thead th {
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: left;
+  padding: 0.65rem 1rem;
+  border-bottom: 1px solid var(--card-border);
+  background: var(--table-head-bg);
+}
+.eth-table tbody td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: middle;
+}
+.eth-table tbody tr {
+  transition: background 0.12s ease;
+}
+.eth-table tbody tr:hover {
+  background: var(--row-hover);
+}
+.eth-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Light mode: remap hard-coded Tailwind utilities ---------- */
+html.light {
+  color: var(--head);
+}
+html.light ::placeholder {
+  color: #8a8a94;
+}
+
+/* surfaces */
+html.light [class*="bg-zinc-9"],
+html.light [class*="from-zinc-9"] {
+  background-color: var(--surface);
+}
+html.light [class*="bg-white/"] {
+  background-color: rgba(255, 255, 255, 0.88);
+}
+html.light [class*="border-white"] {
+  border-color: rgba(24, 24, 27, 0.12);
+}
+html.light [class*="divide-white"] {
+  border-color: rgba(24, 24, 27, 0.08);
+}
+html.light [class*="border-zinc-"] {
+  border-color: rgba(24, 24, 27, 0.14);
+}
+
+/* neutral text */
+html.light [class*="text-zinc-1"],
+html.light [class*="text-zinc-2"],
+html.light [class*="text-zinc-3"],
+html.light [class*="text-zinc-7"],
+html.light [class*="text-zinc-8"],
+html.light [class*="text-zinc-9"] {
+  color: var(--head);
+}
+html.light [class*="text-zinc-4"],
+html.light [class*="text-zinc-5"],
+html.light [class*="text-zinc-6"] {
+  color: var(--muted);
+}
+html.light .text-white:not(.eth-btn) {
+  color: var(--head);
+}
+
+/* accent tints → deeper shades for light backgrounds */
+html.light [class*="text-emerald-3"],
+html.light [class*="text-green-3"] { color: #059669; }
+html.light [class*="text-amber-3"],
+html.light [class*="text-yellow-3"] { color: #d97706; }
+html.light [class*="text-orange-3"] { color: #ea580c; }
+html.light [class*="text-red-3"] { color: #dc2626; }
+html.light [class*="text-rose-3"] { color: #e11d48; }
+html.light [class*="text-cyan-3"] { color: #0e7490; }
+html.light [class*="text-sky-3"] { color: #0284c7; }
+html.light [class*="text-violet-3"],
+html.light [class*="text-violet-4"] { color: #6d28d9; }
+html.light [class*="text-indigo-3"],
+html.light [class*="text-indigo-4"] { color: #4f46e5; }
+html.light [class*="text-slate-3"] { color: #64748b; }
+html.light [class*="text-fuchsia-3"] { color: #a21caf; }
+html.light [class*="text-cyan-4"],
+html.light [class*="text-sky-4"] { color: #0369a1; }
+html.light [class*="text-emerald-4"] { color: #059669; }
+
+/* brand periwinkle accent */
+html.light [class*="b6bdff"] {
+  color: #4f59c9;
+}
+
+/* inverted light buttons (keeps them readable) */
+html.light [class*="bg-white"]:not([class*="bg-white/"]) {
+  background-color: #18181b;
+  color: #fff;
+}
+html.light .eth-btn[class*="from-"] {
+  color: #fff;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  html,
+  body {
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+  header,
+  footer,
+  nav,
+  button,
+  .sticky {
+    display: none !important;
+  }
+  main {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  section,
+  article {
+    border: 1px solid #e5e7eb !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+    break-inside: avoid;
+  }
+  h1,
+  h2,
+  h3,
+  p,
+  li,
+  td,
+  th,
+  tr,
+  span,
+  a,
+  code,
+  b {
+    color: #111827 !important;
+    text-shadow: none !important;
+  }
+  h1 {
+    font-size: 28pt !important;
+  }
+  h2 {
+    font-size: 16pt !important;
+    color: #6d28d9 !important;
+    break-after: avoid;
+  }
+  p,
+  li {
+    font-size: 10.5pt !important;
+    line-height: 1.55 !important;
+  }
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    background: #ffffff !important;
+  }
+  th,
+  td {
+    border: 1px solid #e5e7eb !important;
+    padding: 6px 8px !important;
+    font-size: 9.5pt !important;
+  }
+}

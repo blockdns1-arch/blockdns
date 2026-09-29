@@ -1,0 +1,29 @@
+{
+  "name": "blockdns-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/names.test.ts test/cid.test.ts test/cache.test.ts"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mime-types": "^2.1.35",
+    "viem": "^2.22.10"
+  },
+  "optionalDependencies": {
+    "ioredis": "^5.4.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/mime-types": "^2.1.4",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  }
+}

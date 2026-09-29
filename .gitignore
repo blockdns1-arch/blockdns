@@ -1,0 +1,25 @@
+node_modules/
+artifacts/
+cache/
+typechain-types/
+dist/
+deployments/*.json
+!.env.example
+.env
+base-deploy.env
+social-agent/.env
+social-agent/.env.local
+social-agent/store.json
+social-agent/tokens.json
+social-agent/*.jsonl
+comm/bridge.env
+comm/github.env
+comm/.offset*
+*.log
+wtl prj/
+frontend/.next/
+frontend/out/
+*.tsbuildinfo
+tmp-farm-wallets.json
+comm/inbox.md
+comm/outbox.md
