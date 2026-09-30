@@ -1,0 +1,8 @@
+node_modules*
+node_modules.old
+node_modules/
+.yarn
+.next
+build.log
+.vercel
+.git
