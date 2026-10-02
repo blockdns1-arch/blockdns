@@ -1,6 +1,6 @@
 # BlockDNS Todos (comm/todos.md — read by /todos in Telegram)
 0. GHDA (TOMORROW): resume Talent push —
-   a. DONE ✅ score checked 2026-10-02: 9/285 (new model, browser-computed). Fresh Base Sepolia redeploy DONE:15/15 contracts verified on Sourcify + demouplk registered. Plan: Speed Run +12, forks 3->9 +3, followers 3->9 +1, repos 2->5 +1 -> ~43
+   a. DONE ✅ score checked 2026-10-02: 9/285 (new model, browser-computed). Fresh Base Sepolia redeploy DONE:15/15 contracts verified on Sourcify AND Basescan + demouplk registered. Plan: Speed Run +12, forks 3->9 +3, followers 3->9 +1, repos 2->5 +1 -> ~43
    b. Speed Run Ethereum startup: Connect MetaMask (0x953B) + register on speedrunethereum.com, begin Challenge #00
    c. SKIPPED by user (2026-09-30): no Chainlink call/MNDA/CRE API key. CRE bounty already applied with simulation+video (no call needed). Deploy access = BACKBURNER.
    e. ALCHEMY (in progress): key alch_SRgnKQqvHD0wOwsipNrPI VALIDATED (403 was origin allowlist, not key!). User saved "Allow all domains" on BlockDnsL2 app -> RETEST after propagation. Then build alchemy-nft-demo (dotenv + demo-script.js: getNFTsForOwner 0x953B + getNFTMetadata BAYC). Note: npx @alchemy/cli hung once; retry with npm i -g @alchemy/cli.

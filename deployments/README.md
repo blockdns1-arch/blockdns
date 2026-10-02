@@ -49,10 +49,17 @@ npm run verify:sourcify -- --network base-sepolia   # add --only <ContractKey> f
 
 The script picks the build-info whose source matches the working tree and whose compiled bytecode
 length matches the deployed code, then submits the standard-JSON input to the Sourcify v2 API.
-For Etherscan V2 (which serves Basescan) set `ETHERSCAN_API_KEY`:
+
+The same 15 contracts are also verified on Basescan through Etherscan V2, which needs a free
+`ETHERSCAN_API_KEY` in `base-deploy.env`:
 
 ```bash
-npx hardhat verify --network base-sepolia <address> <constructor args...>
+npm run verify:etherscan                              # add VERIFY_ONLY=BlockDNSwap for a subset
 ```
+
+`scripts/verify-etherscan.ts` rebuilds every constructor argument from chain state and from the
+deployment defaults, then submits all 15 contracts. Post-deployment setter changes — the swap rate,
+for example — are pinned to the value the contract was constructed with, because the explorer matches
+creation bytecode and not current storage.
 
 `base-deploy.env` holds the deployer key and is gitignored.

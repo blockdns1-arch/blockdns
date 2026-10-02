@@ -6,7 +6,7 @@
   "owner": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
   "deployer": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
   "treasury": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
-  "deployedAt": "2026-10-02T16:58:35.092Z",
+  "deployedAt": "2026-10-02T18:15:32.130Z",
   "note": "Testnet deployment. Only public addresses are recorded here; secrets stay in gitignored env files.",
   "contracts": {
     "BDNS": "0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961",
@@ -29,77 +29,92 @@
     "BDNS": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961",
-      "explorer": "https://sepolia.basescan.org/address/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961"
+      "explorer": "https://sepolia.basescan.org/address/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961",
+      "explorerSource": "verified"
     },
     "L2CrossDomainMessenger": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x0a65A92C70456443394CAB879D99562259250C97",
-      "explorer": "https://sepolia.basescan.org/address/0x0a65A92C70456443394CAB879D99562259250C97"
+      "explorer": "https://sepolia.basescan.org/address/0x0a65A92C70456443394CAB879D99562259250C97",
+      "explorerSource": "verified"
     },
     "BlockDNSPricer": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101",
-      "explorer": "https://sepolia.basescan.org/address/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101"
+      "explorer": "https://sepolia.basescan.org/address/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101",
+      "explorerSource": "verified"
     },
     "BlockDNSRegistry": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7",
-      "explorer": "https://sepolia.basescan.org/address/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7"
+      "explorer": "https://sepolia.basescan.org/address/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7",
+      "explorerSource": "verified"
     },
     "BlockDNSResolver": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A",
-      "explorer": "https://sepolia.basescan.org/address/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A"
+      "explorer": "https://sepolia.basescan.org/address/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A",
+      "explorerSource": "verified"
     },
     "BlockDNSMarketplace": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e",
-      "explorer": "https://sepolia.basescan.org/address/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e"
+      "explorer": "https://sepolia.basescan.org/address/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e",
+      "explorerSource": "verified"
     },
     "BDNSRoyaltySplitter": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x0e60701120b5E93895C92cD19d5aF4Fe4013246E",
-      "explorer": "https://sepolia.basescan.org/address/0x0e60701120b5E93895C92cD19d5aF4Fe4013246E"
+      "explorer": "https://sepolia.basescan.org/address/0x0e60701120b5E93895C92cD19d5aF4Fe4013246E",
+      "explorerSource": "verified"
     },
     "BDNSBurnEngine": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1",
-      "explorer": "https://sepolia.basescan.org/address/0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1"
+      "explorer": "https://sepolia.basescan.org/address/0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1",
+      "explorerSource": "verified"
     },
     "BDNSStakingVault": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1",
-      "explorer": "https://sepolia.basescan.org/address/0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1"
+      "explorer": "https://sepolia.basescan.org/address/0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1",
+      "explorerSource": "verified"
     },
     "TeamVestingVault": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d",
-      "explorer": "https://sepolia.basescan.org/address/0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d"
+      "explorer": "https://sepolia.basescan.org/address/0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d",
+      "explorerSource": "verified"
     },
     "MarketingVestingVault": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0xccff52c95905ea9dfDc4949F4266c31b35b20082",
-      "explorer": "https://sepolia.basescan.org/address/0xccff52c95905ea9dfDc4949F4266c31b35b20082"
+      "explorer": "https://sepolia.basescan.org/address/0xccff52c95905ea9dfDc4949F4266c31b35b20082",
+      "explorerSource": "verified"
     },
     "EcosystemVestingVault": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695",
-      "explorer": "https://sepolia.basescan.org/address/0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695"
+      "explorer": "https://sepolia.basescan.org/address/0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695",
+      "explorerSource": "verified"
     },
     "LiquidityVestingVault": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836",
-      "explorer": "https://sepolia.basescan.org/address/0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836"
+      "explorer": "https://sepolia.basescan.org/address/0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836",
+      "explorerSource": "verified"
     },
     "BlockDNSwap": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0xF1410546e20b06E0EE24A816E42d58FD6A64A715",
-      "explorer": "https://sepolia.basescan.org/address/0xF1410546e20b06E0EE24A816E42d58FD6A64A715"
+      "explorer": "https://sepolia.basescan.org/address/0xF1410546e20b06E0EE24A816E42d58FD6A64A715",
+      "explorerSource": "verified"
     },
     "BdnBridge": {
       "match": "verified",
       "sourcify": "https://sourcify.dev/contract/84532/0x5e660A3a6685197375357676c37B7B780De4d306",
-      "explorer": "https://sepolia.basescan.org/address/0x5e660A3a6685197375357676c37B7B780De4d306"
+      "explorer": "https://sepolia.basescan.org/address/0x5e660A3a6685197375357676c37B7B780De4d306",
+      "explorerSource": "verified"
     }
   },
   "live": {

@@ -15,6 +15,7 @@ if (-not $envMap['BASE_DEPLOYER_PRIVATE_KEY']) {
 
 $env:DEPLOYER_PRIVATE_KEY = $envMap['BASE_DEPLOYER_PRIVATE_KEY']
 if ($envMap['TREASURY_ADDRESS']) { $env:TREASURY_ADDRESS = $envMap['TREASURY_ADDRESS'] }
+if ($envMap['ETHERSCAN_API_KEY']) { $env:ETHERSCAN_API_KEY = $envMap['ETHERSCAN_API_KEY'] }
 
 if ($Network -eq "base-sepolia") {
   $env:L2_CHAIN_ID = "84532"

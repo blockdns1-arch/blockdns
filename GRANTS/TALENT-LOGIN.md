@@ -2,8 +2,8 @@
 
 > **Status 2026-10-02:** profile connected for `0x953BaA88c280df9e59C149BC5aB9B9ec64E45323`
 > (score **9/285**), GitHub `@blockdns1-arch` linked and verified. Base Sepolia deployment is live:
-> 15/15 contracts verified on Sourcify and `demouplk` registered on-chain. Re-check the score after the
-> explorer indexes the new deployment.
+> 15/15 contracts verified on Sourcify **and** on Basescan, and `demouplk` registered on-chain.
+> Re-check the score after the explorer indexes the new deployment.
 
 > Verified from docs.talentprotocol.com (Sep 2026):
 > - Scoring = **public onchain + GitHub data** — "no applications, no posting, just shipping".
@@ -32,7 +32,7 @@
 ## STEP C — talent.app profile (10 min)
 3. Go to `https://talent.app` → **Sign up** → **wallet sign-in** → connect with the **deployer wallet**.
 4. In profile settings: **connect GitHub** (same account from Step B).
-5. Optional but boosts: connect Farcaster if you own an account; add X.
+5. Optional but boosts: connect Farcaster if you own an account; add X (`@BlockDnsL2`).
 6. Check your score at `https://talentprotocol.com/score` with address
    `0x953BaA88c280df9e59C149BC5aB9B9ec64E45323` — you should already see points from
    testnet deployments + repo commits (I can query this API for you once profile exists).
