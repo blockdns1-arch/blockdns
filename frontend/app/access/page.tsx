@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { AccessForm } from "./access-form";
 
 export default function AccessPage() {
@@ -12,7 +13,9 @@ export default function AccessPage() {
         <p className="mt-3 text-sm leading-relaxed text-zinc-400">
           Enter the shared team password to open BlockDNS.
         </p>
-        <AccessForm />
+        <Suspense fallback={<div className="mt-7 h-32" aria-hidden="true" />}>
+          <AccessForm />
+        </Suspense>
       </section>
     </main>
   );
