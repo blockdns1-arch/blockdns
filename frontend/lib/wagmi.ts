@@ -26,7 +26,7 @@ export const config = createConfig({
   chains: [blockdnsL2],
   transports: {
     [blockdnsL2.id]: http(
-      process.env.NEXT_PUBLIC_L2_RPC_URL || "http://127.0.0.1:9545"
+      process.env.NEXT_PUBLIC_L2_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com"
     ),
   },
   ssr: true,

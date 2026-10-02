@@ -141,8 +141,7 @@ export default async function Home({
           </h2>
         </div>
         <p className="mx-auto -mt-4 mb-6 max-w-xl text-center text-sm text-zinc-400">
-          Each portal runs on its own localhost port — hop between them like real
-          independent products.
+          Explore the complete BlockDNS ecosystem across Home, Swap, Explorer, and Founder portals.
         </p>
         <div className="grid gap-4 sm:grid-cols-3">
           {portals.map((p, i) => (

@@ -9,10 +9,10 @@ import { ConnectButton } from "@rainbow-me/rainbowkit";
 import TokenEmblem from "@/components/TokenEmblem";
 import { BLOCKDNS_CHAIN_ID } from "@/lib/chains";
 
-const ORIGIN_3000 = "http://localhost:3000";
-const ORIGIN_3001 = "http://localhost:3001";
-const ORIGIN_3002 = "http://localhost:3002";
-const ORIGIN_3003 = "http://localhost:3003";
+const ORIGIN_3000 = "https://blockdns-home.vercel.app";
+const ORIGIN_3001 = "https://blockdns-explorer.vercel.app";
+const ORIGIN_3002 = "https://blockdns-founder.vercel.app";
+const ORIGIN_3003 = "https://blockdns-swap.vercel.app";
 
 const primary = [
   { href: "/", label: "Home" },
@@ -212,7 +212,7 @@ L2 · chain {BLOCKDNS_CHAIN_ID}
                 <div className="w-full max-w-3xl rounded-2xl p-3">
                   <p className="flex items-center gap-2 px-2 py-2 text-[11px] font-semibold uppercase tracking-widest text-zinc-500">
                     <span className="text-sm leading-none">📦</span> Protocol sites ·
-                    each on its own localhost port
+                    each on its own BlockDNS portal
                   </p>
 
                   <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
@@ -240,7 +240,7 @@ L2 · chain {BLOCKDNS_CHAIN_ID}
                         href={ORIGIN_3000}
                         className="text-xs text-zinc-400 transition-colors hover:text-white"
                       >
-                        ← Back to blockdns.localhost:3000
+                        ← Back to BlockDNS Home
                       </Link>
                     )}
                     <p className="text-xs text-zinc-500">
@@ -281,7 +281,7 @@ function SiteTile({
 }) {
   const sameOrigin =
     currentOrigin === origin ||
-    (!currentOrigin && !origin.startsWith("http://localhost:3"));
+    (!currentOrigin && !origin.startsWith("https://blockdns-"));
   const active = (href: string) =>
     sameOrigin && (href === "/" ? pathname === "/" : pathname.startsWith(href));
   const href = (route: string) => `${origin}${route}`;

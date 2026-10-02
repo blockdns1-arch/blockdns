@@ -67,8 +67,8 @@ export default async function ExplorerPage() {
           </p>
           <h1 className="mt-1 text-3xl font-bold tracking-tight">Explorer</h1>
           <p className="mt-1 text-sm text-zinc-500">
-            Live view of the local chain (endpoint{" "}
-            <span className="mono text-xs">{process.env.NEXT_PUBLIC_L2_RPC_URL || "http://127.0.0.1:9545"}</span>)
+Live view of the Sepolia testnet (RPC endpoint{" "}
+          <span className="mono text-xs">{process.env.NEXT_PUBLIC_L2_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com"}</span>)
           </p>
         </div>
         <ExplorerSearch />
