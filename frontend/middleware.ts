@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const MAIN = "http://localhost:3000";
-const EXPLORER = "http://localhost:3001";
-const FOUNDATION = "http://localhost:3002";
-const SWAP = "http://localhost:3003";
+const MAIN = "https://blockdns-home.vercel.app";
+const EXPLORER = "https://blockdns-explorer.vercel.app";
+const FOUNDATION = "https://blockdns-founder.vercel.app";
+const SWAP = "https://blockdns-swap.vercel.app";
 
 const ACCESS_COOKIE = "bdns-team-access";
 const ACCESS_SALT = "blockdns-team-v1";

@@ -1,4 +1,4 @@
-const IPFS_API = process.env.NEXT_PUBLIC_IPFS_API || "http://127.0.0.1:5001";
+const IPFS_API = process.env.NEXT_PUBLIC_IPFS_API || "";
 const PINATA_JWT = process.env.NEXT_PUBLIC_PINATA_JWT || "";
 
 async function uploadToLocalNode(file: File): Promise<string> {
@@ -46,17 +46,17 @@ async function uploadToPinataV2(file: File): Promise<string> {
 }
 
 export async function pinFileToIPFS(file: File): Promise<string> {
-  try {
-    return await uploadToLocalNode(file);
-  } catch (localErr) {
-    if (PINATA_JWT) {
-      console.warn("local IPFS node unavailable, falling back to Pinata:", localErr);
-      try {
-        return await uploadToPinataV3(file);
-      } catch {
-        return await uploadToPinataV2(file);
-      }
+  if (PINATA_JWT) {
+    try {
+      return await uploadToPinataV3(file);
+    } catch {
+      return await uploadToPinataV2(file);
     }
-    throw localErr;
   }
+
+  if (!IPFS_API) {
+    throw new Error("Configure NEXT_PUBLIC_PINATA_JWT or NEXT_PUBLIC_IPFS_API to upload files.");
+  }
+
+  return uploadToLocalNode(file);
 }

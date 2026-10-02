@@ -1,10 +1,10 @@
 import { defineChain } from "viem";
 
 const rpcUrl =
-  process.env.NEXT_PUBLIC_L2_RPC_URL || "http://127.0.0.1:9545";
+  process.env.NEXT_PUBLIC_L2_RPC_URL || "https://ethereum-sepolia-rpc.publicnode.com";
 
 export const BLOCKDNS_CHAIN_ID = Number(
-  process.env.NEXT_PUBLIC_L2_CHAIN_ID || 8461
+  process.env.NEXT_PUBLIC_L2_CHAIN_ID || 11155111
 );
 
 export const blockdnsL2 = defineChain({
