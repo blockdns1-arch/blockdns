@@ -17,22 +17,42 @@ the public record.
 ## Reproducing a deployment
 
 ```bash
-cp .env.example .env      # DEPLOYER_PRIVATE_KEY, BDNS_CAP, TREASURY_ADDRESS, ...
-npm run deploy            # registry, token, pricer
-npm run deploy:phase2     # marketplace, swap, bridge
-npm run deploy:tokenomics # vesting vaults, staking vault, burn engine, splitter
+cp .env.example .env      # RPC endpoints, caps, treasury, tokenomics allocation knobs
+npm run deploy            # BDNS + L2CrossDomainMessenger
+npm run deploy:phase2     # pricer, registry, resolver
+npm run deploy:market     # marketplace
+npm run deploy:tokenomics # royalty splitter, burn engine, staking vault, vesting vaults
+npm run fund:swap-bridge  # swap + bridge (see note below)
+npm run register:domain   # REGISTER_NAME=demo… registers a name on the registry
 ```
 
-Each script writes `deployments/<network>.json` with the resulting addresses. To publish a manifest,
-copy the file into `public/` after removing anything sensitive (only addresses, chain id, owner and
-timestamp are needed).
+`deploy-swap-bridge.ts` deploys the swap and bridge in one step and then funds them. When it runs
+before the tokenomics deployment it has no BDNS to send and reverts after the contracts are already
+deployed. In that case export `SWAP_ADDRESS` / `BRIDGE_ADDRESS` and run `npm run fund:swap-bridge`
+instead — it only transfers the missing liquidity and records the addresses in the local manifest:
+
+```bash
+SWAP_ADDRESS=0x… BRIDGE_ADDRESS=0x… npx hardhat run scripts/fund-swap-bridge.ts --network base-sepolia
+```
+
+Each script writes `deployments/<network>.json` with the resulting addresses. `npm run manifest:export`
+regenerates the committed public manifest from that file, adding explorer and Sourcify links plus the
+verification match status, so the public record can never drift from the deployment.
 
 ## Verification
 
-Contracts deployed on Base Sepolia can be verified on Basescan:
+All 15 Base Sepolia contracts are verified on Sourcify. No API key is required:
+
+```bash
+npm run verify:sourcify -- --network base-sepolia   # add --only <ContractKey> for one contract
+```
+
+The script picks the build-info whose source matches the working tree and whose compiled bytecode
+length matches the deployed code, then submits the standard-JSON input to the Sourcify v2 API.
+For Etherscan V2 (which serves Basescan) set `ETHERSCAN_API_KEY`:
 
 ```bash
 npx hardhat verify --network base-sepolia <address> <constructor args...>
 ```
 
-`base-deploy.env` holds the deployer key used for verification and is gitignored.
+`base-deploy.env` holds the deployer key and is gitignored.

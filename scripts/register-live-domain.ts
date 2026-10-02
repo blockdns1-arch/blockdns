@@ -18,10 +18,18 @@ function randomName(): string {
   return s;
 }
 
+function resolveName(): string {
+  const requested = process.env.REGISTER_NAME?.trim().toLowerCase();
+  if (!requested) return randomName();
+  if (!/^[a-z0-9]{3,12}$/.test(requested)) {
+    throw new Error(`invalid REGISTER_NAME "${requested}": expected 3-12 lowercase alphanumeric characters`);
+  }
+  return requested;
+}
+
 async function main(): Promise<void> {
-  const deployment = JSON.parse(
-    fs.readFileSync(path.join(__dirname, "..", "deployments", `${network.name}.json`), "utf8")
-  );
+  const deploymentPath = path.join(__dirname, "..", "deployments", `${network.name}.json`);
+  const deployment = JSON.parse(fs.readFileSync(deploymentPath, "utf8"));
   const address = (deployment.contracts || {}).BlockDNSRegistry;
   if (!address) throw new Error("BlockDNSRegistry not found in deployment");
 
@@ -29,11 +37,15 @@ async function main(): Promise<void> {
   const nextNonce = await signer.getNonce();
   const registry = new ethers.Contract(address, abi, signer);
 
-  const name = randomName();
+  const name = resolveName();
   const tx = await registry.registerDomain(name, { nonce: nextNonce });
   const receipt = await tx.wait();
 
   console.log(`REGISTERED name=${name} tx=${tx.hash} block=${receipt.blockNumber}`);
+
+  deployment.demoDomain = { name, tx: tx.hash, block: receipt.blockNumber };
+  fs.writeFileSync(deploymentPath, JSON.stringify(deployment, null, 2));
+  console.log(`deployment saved to ${deploymentPath}`);
 }
 
 main().catch((error) => {

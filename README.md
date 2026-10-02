@@ -77,17 +77,19 @@ marketplace, swap, bridge, tokenomics vaults and the L2 cross-domain messenger.
 The full address manifest is committed at [`deployments/public/base-sepolia.json`](deployments/public/base-sepolia.json)
 (public addresses only, no secrets). Highlights:
 
-| Contract | Address |
-| --- | --- |
-| `BlockDNSRegistry` | `0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1` |
-| `BlockDNSResolver` | `0x704DA8902F16dEb62C6feaF711F8Dd59b6e212c4` |
-| `BlockDNSPricer` | `0xA97aB8eacc5570A48b23365ce39C792b0c569298` |
-| `BDNS` | `0x43fc4eAB8971B95fa1AD45818DEDb1F49e71B746` |
-| `BlockDNSMarketplace` | `0xFD761b4E36831235140a39291d338D701056B58c` |
-| `BlockDNSwap` | `0x1fB7BCdF94D00A11196Db6fee2eec21e48332d12` |
-| `BdnBridge` | `0x6a05aB290A67420A0d6db6c15a0D81864df0626a` |
+| Contract | Address | Sourcify |
+| --- | --- | --- |
+| `BDNS` | `0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961` | [verified](https://sourcify.dev/contract/84532/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961) |
+| `BlockDNSRegistry` | `0x47BC8BcC51234c056D2A95c3E3a2747D851605C7` | [verified](https://sourcify.dev/contract/84532/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7) |
+| `BlockDNSResolver` | `0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A` | [verified](https://sourcify.dev/contract/84532/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A) |
+| `BlockDNSPricer` | `0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101` | [verified](https://sourcify.dev/contract/84532/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101) |
+| `BlockDNSMarketplace` | `0x4cA0a781cc784759d9792Cd0EC502E59C93c970e` | [verified](https://sourcify.dev/contract/84532/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e) |
+| `BlockDNSwap` | `0xF1410546e20b06E0EE24A816E42d58FD6A64A715` | [verified](https://sourcify.dev/contract/84532/0xF1410546e20b06E0EE24A816E42d58FD6A64A715) |
+| `BdnBridge` | `0x5e660A3a6685197375357676c37B7B780De4d306` | [verified](https://sourcify.dev/contract/84532/0x5e660A3a6685197375357676c37B7B780De4d306) |
+| `L2CrossDomainMessenger` | `0x0a65A92C70456443394CAB879D99562259250C97` | [verified](https://sourcify.dev/contract/84532/0x0a65A92C70456443394CAB879D99562250C97) |
 
-A live registration exists for the name `demouplk` — see the transaction recorded in the manifest.
+All 15 deployed contracts are verified on Sourcify, and the name `demouplk` is registered on-chain
+([registration transaction](https://sepolia.basescan.org/tx/0xe005bde59af906ee8dffc2c3e8a72cdb005d8acef85659a51ec84941fc2024f9)).
 
 ---
 
@@ -221,16 +223,17 @@ Output is a single verification record (`onchainOwner`, `externalData`, `verifie
 
 ## Contract verification
 
-Contract verification is wired up through `hardhat-verify`, with Sourcify enabled by default so a
-plain clone can verify without any API key:
+All 15 deployed contracts are already verified on Sourcify, which needs no API key:
 
 ```bash
-npx hardhat verify --network base-sepolia \
-  --contract contracts/BlockDNSRegistry.sol:BlockDNSRegistry \
-  0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1 <admin> <baseURI>
+npm run verify:sourcify -- --network base-sepolia
 ```
 
-Set `ETHERSCAN_API_KEY` to also submit through Etherscan V2 (which serves Basescan):
+That script submits the exact standard-JSON input Hardhat produced (selected by matching the source on
+disk and the deployed bytecode length) to the Sourcify v2 API, then polls each job. `npm run manifest:export`
+refreshes the committed public manifest with the resulting verification links.
+
+Etherscan V2 (which serves Basescan) also works when `ETHERSCAN_API_KEY` is set:
 
 ```bash
 ETHERSCAN_API_KEY=XXX npx hardhat verify --network base-sepolia <address> <args...>

@@ -1,5 +1,10 @@
 # Talent Setup — 20 minutes, unlocks recurring ETH (Big Bang)
 
+> **Status 2026-10-02:** profile connected for `0x953BaA88c280df9e59C149BC5aB9B9ec64E45323`
+> (score **9/285**), GitHub `@blockdns1-arch` linked and verified. Base Sepolia deployment is live:
+> 15/15 contracts verified on Sourcify and `demouplk` registered on-chain. Re-check the score after the
+> explorer indexes the new deployment.
+
 > Verified from docs.talentprotocol.com (Sep 2026):
 > - Scoring = **public onchain + GitHub data** — "no applications, no posting, just shipping".
 > - Data points that count for Base: Contracts Deployed (MAINNET + **TESTNET**), Verified

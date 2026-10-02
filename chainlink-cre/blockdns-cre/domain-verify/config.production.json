@@ -1,7 +1,7 @@
 {
   "schedule": "*/30 * * * * *",
   "name": "demouplk",
-  "registry": "0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1",
+  "registry": "0x47BC8BcC51234c056D2A95c3E3a2747D851605C7",
   "expectedOwner": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
   "githubRepo": "blockdns1-arch/blockdns",
   "githubUrl": "https://api.github.com/repos/blockdns1-arch/blockdns",

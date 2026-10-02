@@ -24,8 +24,8 @@
 ## 2. Live proof links (points of evidence)
 
 - Base Sepolia suite: `contracts` → first live `demouplk` registration tx
-  `0xd62c005528b5308db3177c575e2e73de06d89304eaac3ba229ac316cc4cd5857` (block 47,424,582)
-- Registry `0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1`, BDNS `0x43fc4eAB8971B95fa1AD45818DEDb1F49e71B746`
+  `0xe005bde59af906ee8dffc2c3e8a72cdb005d8acef85659a51ec84941fc2024f9` (block 47,596,555)
+- Registry `0x47BC8BcC51234c056D2A95c3E3a2747D851605C7`, BDNS `0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961`
 - Explorer decodes + labels our contracts (verified): shows `registerDomain` → Success
 - Repo: `github.com/<owner>/blockdns` (Open Source), Whitepaper in-repo
 

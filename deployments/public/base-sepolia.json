@@ -6,27 +6,104 @@
   "owner": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
   "deployer": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
   "treasury": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
-  "deployedAt": "2026-09-28T17:23:58.689Z",
-  "note": "Testnet deployment. Only public addresses are recorded here; secrets stay in gitignored .env files.",
+  "deployedAt": "2026-10-02T16:58:35.092Z",
+  "note": "Testnet deployment. Only public addresses are recorded here; secrets stay in gitignored env files.",
   "contracts": {
-    "BDNS": "0x43fc4eAB8971B95fa1AD45818DEDb1F49e71B746",
-    "L2CrossDomainMessenger": "0xAc5C379b09C8d0d28f610747419bE8256051c69C",
-    "BDNSRoyaltySplitter": "0x1Ffe30F0314C15C9a9c5991a0818ae682DCC47AA",
-    "BDNSBurnEngine": "0x1Cd0118510f4946Be8d38c19278f1AaddE2B344B",
-    "BDNSStakingVault": "0xD502ABDE5bA5ec2Dcd908f946C5b25CEDeA416cb",
-    "TeamVestingVault": "0x257CA4E2e8F5DE6c4d05B9437D727aB03168Ae7a",
-    "MarketingVestingVault": "0x59497b2F1f1AcEd69A8AeC9e0004B9Ee67B328B3",
-    "EcosystemVestingVault": "0x1e48a5E0F5841a2f36E07D7a7256A4783F87D9c9",
-    "LiquidityVestingVault": "0x39Fde5E17878ad1BD9F305fbe3CbBA3455381Ac2",
-    "BlockDNSPricer": "0xA97aB8eacc5570A48b23365ce39C792b0c569298",
-    "BlockDNSRegistry": "0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1",
-    "BlockDNSResolver": "0x704DA8902F16dEb62C6feaF711F8Dd59b6e212c4",
-    "BlockDNSMarketplace": "0xFD761b4E36831235140a39291d338D701056B58c",
-    "BlockDNSwap": "0x1fB7BCdF94D00A11196Db6fee2eec21e48332d12",
-    "BdnBridge": "0x6a05aB290A67420A0d6db6c15a0D81864df0626a"
+    "BDNS": "0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961",
+    "L2CrossDomainMessenger": "0x0a65A92C70456443394CAB879D99562259250C97",
+    "BlockDNSPricer": "0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101",
+    "BlockDNSRegistry": "0x47BC8BcC51234c056D2A95c3E3a2747D851605C7",
+    "BlockDNSResolver": "0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A",
+    "BlockDNSMarketplace": "0x4cA0a781cc784759d9792Cd0EC502E59C93c970e",
+    "BDNSRoyaltySplitter": "0x0e60701120b5E93895C92cD19d5aF4Fe4013246E",
+    "BDNSBurnEngine": "0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1",
+    "BDNSStakingVault": "0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1",
+    "TeamVestingVault": "0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d",
+    "MarketingVestingVault": "0xccff52c95905ea9dfDc4949F4266c31b35b20082",
+    "EcosystemVestingVault": "0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695",
+    "LiquidityVestingVault": "0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836",
+    "BlockDNSwap": "0xF1410546e20b06E0EE24A816E42d58FD6A64A715",
+    "BdnBridge": "0x5e660A3a6685197375357676c37B7B780De4d306"
+  },
+  "verification": {
+    "BDNS": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961",
+      "explorer": "https://sepolia.basescan.org/address/0x15797f41C030d07Fd6924Ab0F93cEC1Bf62a7961"
+    },
+    "L2CrossDomainMessenger": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x0a65A92C70456443394CAB879D99562259250C97",
+      "explorer": "https://sepolia.basescan.org/address/0x0a65A92C70456443394CAB879D99562259250C97"
+    },
+    "BlockDNSPricer": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101",
+      "explorer": "https://sepolia.basescan.org/address/0xDc0C8a3BCBa905E67f7a5551301462b4E57e4101"
+    },
+    "BlockDNSRegistry": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7",
+      "explorer": "https://sepolia.basescan.org/address/0x47BC8BcC51234c056D2A95c3E3a2747D851605C7"
+    },
+    "BlockDNSResolver": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A",
+      "explorer": "https://sepolia.basescan.org/address/0x81447f17daa279B9a3cB1AB7Ea60355Cde8deD7A"
+    },
+    "BlockDNSMarketplace": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e",
+      "explorer": "https://sepolia.basescan.org/address/0x4cA0a781cc784759d9792Cd0EC502E59C93c970e"
+    },
+    "BDNSRoyaltySplitter": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x0e60701120b5E93895C92cD19d5aF4Fe4013246E",
+      "explorer": "https://sepolia.basescan.org/address/0x0e60701120b5E93895C92cD19d5aF4Fe4013246E"
+    },
+    "BDNSBurnEngine": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1",
+      "explorer": "https://sepolia.basescan.org/address/0xBd541B8DaaB7B6a0c3a6b32ab11DA0682541FbE1"
+    },
+    "BDNSStakingVault": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1",
+      "explorer": "https://sepolia.basescan.org/address/0x45b22E0f69c12fb0922173A7D3B80a9c9b59d4B1"
+    },
+    "TeamVestingVault": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d",
+      "explorer": "https://sepolia.basescan.org/address/0x0bFbB084D739EAdD5E540b67BA6Bc4fA31f8Ce8d"
+    },
+    "MarketingVestingVault": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0xccff52c95905ea9dfDc4949F4266c31b35b20082",
+      "explorer": "https://sepolia.basescan.org/address/0xccff52c95905ea9dfDc4949F4266c31b35b20082"
+    },
+    "EcosystemVestingVault": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695",
+      "explorer": "https://sepolia.basescan.org/address/0x1Ece185d2156Fc0fBe0412ab5b9b8Dbb71412695"
+    },
+    "LiquidityVestingVault": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836",
+      "explorer": "https://sepolia.basescan.org/address/0x0eD4d7eB94e766448DBfe89a9a12bEed90B4C836"
+    },
+    "BlockDNSwap": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0xF1410546e20b06E0EE24A816E42d58FD6A64A715",
+      "explorer": "https://sepolia.basescan.org/address/0xF1410546e20b06E0EE24A816E42d58FD6A64A715"
+    },
+    "BdnBridge": {
+      "match": "verified",
+      "sourcify": "https://sourcify.dev/contract/84532/0x5e660A3a6685197375357676c37B7B780De4d306",
+      "explorer": "https://sepolia.basescan.org/address/0x5e660A3a6685197375357676c37B7B780De4d306"
+    }
   },
   "live": {
     "registeredName": "demouplk",
-    "exampleTx": "https://sepolia.basescan.org/tx/0xd62c005528b5308db3177c575e2e73de06d89304eaac3ba229ac316cc4cd5857"
+    "exampleTx": "https://sepolia.basescan.org/tx/0xe005bde59af906ee8dffc2c3e8a72cdb005d8acef85659a51ec84941fc2024f9"
   }
 }
