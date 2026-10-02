@@ -1,0 +1,224 @@
+# BlockDNS
+
+**On-chain naming for the decentralized web.** `.bdns` domains are ERC-721 NFTs minted once and owned forever — bound to IPFS content and resolvable to wallet records for ETH, BTC and SOL. No renewals, no rent, no registrar.
+
+BlockDNS ships as three parts that run together: an **L2 chain** (chain ID `8461`) holding the registry, a **DNS-over-RPC gateway** that resolves `.bdns` names to IPFS content over plain HTTP, and a **Next.js dApp** for registering, pricing, trading and bridging names.
+
+---
+
+## Architecture
+
+```
+                    ┌──────────────────────────────────────┐
+   Browser ────────▶│  Frontend (Next.js 15, wagmi/viem)   │
+   *.bdns.link ────▶│  register · marketplace · swap · L1↔L2│
+                    └───────────────┬──────────────────────┘
+                                    │ viem reads / wallet txs
+                    ┌───────────────▼──────────────────────┐
+                    │   BlockDNS L2 (chainId 8461)          │
+                    │   BlockDNSRegistry  (ERC-721 domain) │
+                    │   BDNS · Pricer · Marketplace · Swap  │
+                    │   Resolver (read helper for wallets)  │
+                    └───────────────┬──────────────────────┘
+                                    │ resolveName() → CID
+                    ┌───────────────▼──────────────────────┐
+   DNS request ────▶│  Gateway (Express + viem + Redis)    │
+   Host: name.bdns │  host parse → cache → on-chain read  │
+                    │  → CID verify → IPFS fetch (2/3)     │
+                    └───────────────┬──────────────────────┘
+                                    │
+                       ┌────────────▼────────────┐
+                       │ IPFS (Cloudflare/Pinata/ │
+                       │ local Kubo, consensus)  │
+                       └─────────────────────────┘
+```
+
+Resolution path for `GET http://gateway/ Host: mysite.bdns`:
+
+1. Parse the `Host` header, validate it against `ALLOWED_HOST_SUFFIXES` (`.bdns`, `.bdns.link`).
+2. Cache lookup (Redis, or in-memory when `REDIS_URL` is empty) with `CACHE_TTL_SECONDS`.
+3. On-chain read `BlockDNSRegistry.resolveName(name)` via viem → owner + CID.
+4. Fetch the content from `IPFS_GATEWAYS`; validate the CID hash against the bytes returned.
+5. Return the content with the sniffed MIME type (apex names redirect to `APEX_REDIRECT_URL`).
+
+---
+
+## Contracts
+
+Solidity `0.8.20`, optimizer on (200 runs), `evmVersion: paris`. OpenZeppelin v5.
+
+| Contract | Purpose |
+| --- | --- |
+| `BlockDNSRegistry.sol` | ERC-721 domain NFT — one mint per name, forever. Holds the IPFS CID, per-chain address records and custom TXT keys. Events: `DomainRegistered`, `IPFSRecordUpdated`, `AddressRecordUpdated`, `CustomTXTUpdated`, `CustomTXTRemoved`, `PricerUpdated`, `BaseURIUpdated`. |
+| `BDNS.sol` | ERC-20 + burnable + permit + `AccessControl`. Hard `cap` (deploy default 1B), `MINTER_ROLE` / `BURNER_ROLE`, plus a validator set with staking, unbonding period and slashing. |
+| `BlockDNSPricer.sol` | Length-based pricing: names of `FREE_TIER_MIN_LENGTH` (5) characters or more are free, shorter names use `priceTier2` / `priceTier4`. Events: `PricesUpdated`. |
+| `BlockDNSMarketplace.sol` | On-chain resale with a configurable fee in basis points (`MAX_FEE_BPS = 500`, i.e. 5% cap) routed to a `royaltySplitter` and a treasury. Events: `FeeUpdated`, `RoyaltySplitterUpdated`. |
+| `BlockDNSResolver.sol` | Read helper for wallets and clients: `resolveTokenId(name)` and `resolveIPFS(name)` resolve straight from the registry. |
+| `BlockDNSwap.sol` | ETH ↔ BDNS swap with `previewEthToBdns` / `previewBdnsToEth` quoting and owner-set rates and fees. |
+| `BdnBridge.sol` | BDNS bridge in both directions: `deposit()` (L1 → L2) and `withdraw()` (L2 → L1), with a configurable BDNS/USD fee and fee collector. |
+| `tokenomics/BDNSVestingVault.sol` | Cliff + linear vesting for team and contributor allocations; only the beneficiary can claim. |
+| `tokenomics/BDNSStakingVault.sol` | Locks a tranche schedule up front and releases emission linearly to staking rewards. |
+| `tokenomics/BDNSAirdrop.sol` | Merkle airdrop with a TGE share plus linear vesting, one cumulative claim per address. |
+| `tokenomics/BDNSRoyaltySplitter.sol` | Splits marketplace fees across treasury / dev / liquidity / marketing / audit (shares sum to 10000, max 50% each). |
+| `tokenomics/BDNSBurnEngine.sol` | 10-year decaying auto-burn (0.5% → 0) with a 500M hard cap on destroyed supply. |
+| `messaging/CrossDomainMessenger.sol` | Event-based cross-domain transport: nonce + per-message hash replay protection, `xDomainMessageSender` auth. |
+| `messaging/L1CrossDomainMessenger.sol` | L1-side messenger instance (accepts native value). |
+| `messaging/L2CrossDomainMessenger.sol` | L2-side messenger instance. |
+
+All 15 contracts are fully NatSpec-documented (purpose, invariants, `@param` / `@return` on every public and external function), which makes the ABI self-describing for integrators.
+
+---
+
+## Quickstart
+
+### 1. Install
+
+```bash
+git clone https://github.com/blockdns1-arch/blockdns.git
+cd blockdns
+npm install
+
+cp .env.example .env
+cp gateway/.env.example gateway/.env
+cp frontend/.env.example frontend/.env
+```
+
+### 2. Chain + contracts
+
+```bash
+npm run build                       # hardhat compile
+npx hardhat node                    # local L2 on http://127.0.0.1:9545, chainId 8461
+npm run deploy                      # deploys registry, token, pricer (+ phase 2 / tokenomics scripts)
+npm run test                        # 68 contract tests
+```
+
+The local node listens on port **9545** (set in `hardhat.config.ts`) so it matches the `l2` network and the gateway docker-compose defaults with no extra configuration.
+
+Copy the printed addresses into `gateway/.env` and `frontend/.env`:
+
+```bash
+REGISTRY_ADDRESS=0x...
+NEXT_PUBLIC_REGISTRY_ADDRESS=0x...
+```
+
+### 3. Gateway
+
+```bash
+cd gateway
+npm install
+npm run dev                         # tsx watch, http://localhost:8080
+npm test                            # unit tests: host parsing, CID, cache
+```
+
+```bash
+curl http://localhost:8080/health
+curl http://localhost:8080/resolve/mywebsite
+curl http://localhost:8080/ccip/mywebsite        # CCIP-Read style JSON response
+curl -H "Host: mywebsite.bdns" http://localhost:8080/
+```
+
+### 4. Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev                         # http://localhost:3000
+npm run typecheck
+```
+
+Connect a wallet, register a name, set its IPFS CID, then resolve it through the gateway.
+
+### 5. Docker (gateway + Redis + IPFS)
+
+```bash
+cd gateway
+cp .env.example .env               # REGISTRY_ADDRESS is required
+docker compose up -d --build
+curl $(docker port blockdns-gateway 8080/tcp)/health
+```
+
+Compose brings up the gateway, a Redis cache and a local Kubo IPFS node. It reads the same
+`gateway/.env` variables, so the container picks up your deployed registry address automatically.
+
+---
+
+## Networks
+
+| Network | Chain ID | Default RPC |
+| --- | --- | --- |
+| `hardhat` | `8461` | in-process (local L2, port `9545`) |
+| `l1` | `11155111` (Sepolia) | `http://127.0.0.1:8545` |
+| `l2` | `8461` (BlockDNS) | `http://127.0.0.1:9545` |
+| `base` | `8453` | `https://mainnet.base.org` |
+
+All of them are overridable through `.env` (`L1_RPC_URL`, `L2_RPC_URL`, `BASE_RPC_URL`, `*_CHAIN_ID`).
+
+---
+
+## Environment variables
+
+| File | Key variables |
+| --- | --- |
+| `.env` | `DEPLOYER_PRIVATE_KEY`, `L1_RPC_URL`, `L2_RPC_URL`, `BASE_RPC_URL`, `*_CHAIN_ID` |
+| `gateway/.env` | `PORT`, `L2_RPC_URL`, `L2_CHAIN_ID`, `REGISTRY_ADDRESS`, `RESOLVER_ADDRESS`, `ALLOWED_HOST_SUFFIXES`, `CACHE_TTL_SECONDS`, `REDIS_URL`, `IPFS_GATEWAYS`, `GATEWAY_CONSENSUS`, `STRICT_CID_VERIFY`, `MAX_CONTENT_BYTES`, `REQUEST_TIMEOUT_MS`, `APEX_REDIRECT_URL` |
+| `frontend/.env` | `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`, `NEXT_PUBLIC_L2_CHAIN_ID`, `NEXT_PUBLIC_L2_RPC_URL`, `NEXT_PUBLIC_{REGISTRY,PRICER,BDNS,SWAP,BRIDGE}_ADDRESS`, `NEXT_PUBLIC_EXPLORER_URL`, `NEXT_PUBLIC_IPFS_GATEWAY` |
+
+Secrets are never committed: `.env`, `base-deploy.env`, `social-agent/.env` are gitignored, and only `.env.example` files are tracked.
+
+---
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run build` / `clean` | compile / wipe Hardhat artifacts |
+| `npm run test` | contract test suite |
+| `npm run deploy` | deploy registry + token + pricer on the active network |
+| `npm run deploy:l1` / `deploy:l2` | deploy to a specific network |
+| `npm run deploy:phase2` | marketplace + swap + bridge |
+| `npm run deploy:tokenomics` | vesting + staking |
+| `npm run merkle:generate` | build the airdrop Merkle root |
+| `npm run watch:events` | stream registry events (use `:local` for the hardhat chain) |
+| `npm run pdf:whitepaper` | render `WHITEPAPER.md` to `Whitepaper.pdf` |
+| `npm run social:*` | social agent (Telegram / X / Farcaster) helpers |
+
+---
+
+## Chainlink CRE workflow
+
+`chainlink-cre/blockdns-cre/domain-verify/` runs a Chainlink CRE job that cross-checks a `.bdns` name against three independent sources on a 30-second cadence:
+
+- **EVM read** — the name's `tokenId` and current owner from the registry on Base Sepolia
+- **GitHub API** — whether the repo backing the name exists
+- **DNS-over-HTTPS** — whether a legacy DNS `TXT` record still claims the name
+
+Output is a single verification record (`onchainOwner`, `externalData`, `verified`). Simulation results live in `chainlink-cre/blockdns-cre/domain-verify/simulation-result.json`.
+
+---
+
+## Tests
+
+| Suite | Command | Covers |
+| --- | --- | --- |
+| Contracts | `npm run test` | registry, marketplace, tokenomics, event watcher |
+| Gateway | `cd gateway && npm test` | host parsing, CID validation, cache |
+| Frontend | `cd frontend && npm run typecheck` | types |
+
+---
+
+## Frontend pages
+
+`/mint` (register a name) · `/market` (marketplace) · `/swap` (token swap) · `/bridge` (L1 ↔ L2) · `/explorer` + `/explorer/tx/[hash]` + `/explorer/block/[number]` · `/dashboard` · `/foundation` · `/whitepaper`
+
+---
+
+## Documentation
+
+- [`WHITEPAPER.md`](WHITEPAPER.md) — protocol spec, tokenomics, roadmap
+- [`Whitepaper.pdf`](Whitepaper.pdf) — rendered version
+- [`gateway/README.md`](gateway/README.md) — gateway architecture and security model
+- [`GRANTS/`](GRANTS) — hackathon and grant submissions
+
+## License
+
+[MIT](LICENSE) — matches the `SPDX-License-Identifier: MIT` headers already present in every source file.

@@ -20,6 +20,9 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       chainId: 8461,
+      // Port 9545 so a local `npx hardhat node` is reachable through the `l2` network below
+      // (and through the gateway docker-compose defaults) without any extra env overrides.
+      port: 9545,
     },
     l1: {
       url: process.env.L1_RPC_URL ?? "http://127.0.0.1:8545",

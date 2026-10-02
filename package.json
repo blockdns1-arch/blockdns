@@ -2,6 +2,7 @@
   "name": "blockdns-contracts",
   "version": "0.1.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "build": "hardhat compile",
     "clean": "hardhat clean",
