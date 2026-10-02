@@ -4,6 +4,7 @@ cache/
 typechain-types/
 dist/
 deployments/*.json
+!deployments/public/*.json
 !.env.example
 .env
 base-deploy.env

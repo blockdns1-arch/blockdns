@@ -1,6 +1,7 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
 import "@nomicfoundation/hardhat-chai-matchers";
+import "@nomicfoundation/hardhat-verify";
 import * as dotenv from "dotenv";
 
 dotenv.config();
@@ -44,6 +45,22 @@ const config: HardhatUserConfig = {
       chainId: Number(process.env.BASE_SEPOLIA_CHAIN_ID ?? 84532),
       accounts,
     },
+  },
+  // Sourcify needs no API key, so verification can run straight from a plain clone.
+  sourcify: {
+    enabled: true,
+  },
+  etherscan: {
+    // Etherscan V2 serves every EVM chain from one API key; Basescan is reached through it.
+    apiKey: process.env.ETHERSCAN_API_KEY ?? "",
+    customChains: [
+      {
+        network: "base-sepolia",
+        chainId: 84532,
+        url: "https://api-sepolia.basescan.org/api",
+        publicExplorer: "https://sepolia.basescan.org",
+      },
+    ],
   },
 };
 

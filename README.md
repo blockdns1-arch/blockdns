@@ -69,6 +69,28 @@ All 15 contracts are fully NatSpec-documented (purpose, invariants, `@param` / `
 
 ---
 
+## Live deployment
+
+BlockDNS is deployed on **Base Sepolia** (chain ID `84532`) — registry, resolver, pricer, token,
+marketplace, swap, bridge, tokenomics vaults and the L2 cross-domain messenger.
+
+The full address manifest is committed at [`deployments/public/base-sepolia.json`](deployments/public/base-sepolia.json)
+(public addresses only, no secrets). Highlights:
+
+| Contract | Address |
+| --- | --- |
+| `BlockDNSRegistry` | `0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1` |
+| `BlockDNSResolver` | `0x704DA8902F16dEb62C6feaF711F8Dd59b6e212c4` |
+| `BlockDNSPricer` | `0xA97aB8eacc5570A48b23365ce39C792b0c569298` |
+| `BDNS` | `0x43fc4eAB8971B95fa1AD45818DEDb1F49e71B746` |
+| `BlockDNSMarketplace` | `0xFD761b4E36831235140a39291d338D701056B58c` |
+| `BlockDNSwap` | `0x1fB7BCdF94D00A11196Db6fee2eec21e48332d12` |
+| `BdnBridge` | `0x6a05aB290A67420A0d6db6c15a0D81864df0626a` |
+
+A live registration exists for the name `demouplk` — see the transaction recorded in the manifest.
+
+---
+
 ## Quickstart
 
 ### 1. Install
@@ -150,6 +172,7 @@ Compose brings up the gateway, a Redis cache and a local Kubo IPFS node. It read
 | `l1` | `11155111` (Sepolia) | `http://127.0.0.1:8545` |
 | `l2` | `8461` (BlockDNS) | `http://127.0.0.1:9545` |
 | `base` | `8453` | `https://mainnet.base.org` |
+| `base-sepolia` | `84532` | `https://sepolia.base.org` |
 
 All of them are overridable through `.env` (`L1_RPC_URL`, `L2_RPC_URL`, `BASE_RPC_URL`, `*_CHAIN_ID`).
 
@@ -196,6 +219,28 @@ Output is a single verification record (`onchainOwner`, `externalData`, `verifie
 
 ---
 
+## Contract verification
+
+Contract verification is wired up through `hardhat-verify`, with Sourcify enabled by default so a
+plain clone can verify without any API key:
+
+```bash
+npx hardhat verify --network base-sepolia \
+  --contract contracts/BlockDNSRegistry.sol:BlockDNSRegistry \
+  0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1 <admin> <baseURI>
+```
+
+Set `ETHERSCAN_API_KEY` to also submit through Etherscan V2 (which serves Basescan):
+
+```bash
+ETHERSCAN_API_KEY=XXX npx hardhat verify --network base-sepolia <address> <args...>
+```
+
+Constructor arguments for the live Base Sepolia deployment are recorded next to the addresses in
+[`deployments/README.md`](deployments/README.md).
+
+---
+
 ## Tests
 
 | Suite | Command | Covers |
@@ -217,6 +262,7 @@ Output is a single verification record (`onchainOwner`, `externalData`, `verifie
 - [`WHITEPAPER.md`](WHITEPAPER.md) — protocol spec, tokenomics, roadmap
 - [`Whitepaper.pdf`](Whitepaper.pdf) — rendered version
 - [`gateway/README.md`](gateway/README.md) — gateway architecture and security model
+- [`deployments/README.md`](deployments/README.md) — public deployment manifests and verification
 - [`GRANTS/`](GRANTS) — hackathon and grant submissions
 
 ## License

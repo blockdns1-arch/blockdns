@@ -1,0 +1,32 @@
+{
+  "network": "base-sepolia",
+  "chainId": 84532,
+  "explorer": "https://sepolia.basescan.org",
+  "isL2": true,
+  "owner": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
+  "deployer": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
+  "treasury": "0x953BaA88c280df9e59C149BC5aB9B9ec64E45323",
+  "deployedAt": "2026-09-28T17:23:58.689Z",
+  "note": "Testnet deployment. Only public addresses are recorded here; secrets stay in gitignored .env files.",
+  "contracts": {
+    "BDNS": "0x43fc4eAB8971B95fa1AD45818DEDb1F49e71B746",
+    "L2CrossDomainMessenger": "0xAc5C379b09C8d0d28f610747419bE8256051c69C",
+    "BDNSRoyaltySplitter": "0x1Ffe30F0314C15C9a9c5991a0818ae682DCC47AA",
+    "BDNSBurnEngine": "0x1Cd0118510f4946Be8d38c19278f1AaddE2B344B",
+    "BDNSStakingVault": "0xD502ABDE5bA5ec2Dcd908f946C5b25CEDeA416cb",
+    "TeamVestingVault": "0x257CA4E2e8F5DE6c4d05B9437D727aB03168Ae7a",
+    "MarketingVestingVault": "0x59497b2F1f1AcEd69A8AeC9e0004B9Ee67B328B3",
+    "EcosystemVestingVault": "0x1e48a5E0F5841a2f36E07D7a7256A4783F87D9c9",
+    "LiquidityVestingVault": "0x39Fde5E17878ad1BD9F305fbe3CbBA3455381Ac2",
+    "BlockDNSPricer": "0xA97aB8eacc5570A48b23365ce39C792b0c569298",
+    "BlockDNSRegistry": "0xBF04C0f9da8FAfcD570fd3D1a3Fa2E64154F5bb1",
+    "BlockDNSResolver": "0x704DA8902F16dEb62C6feaF711F8Dd59b6e212c4",
+    "BlockDNSMarketplace": "0xFD761b4E36831235140a39291d338D701056B58c",
+    "BlockDNSwap": "0x1fB7BCdF94D00A11196Db6fee2eec21e48332d12",
+    "BdnBridge": "0x6a05aB290A67420A0d6db6c15a0D81864df0626a"
+  },
+  "live": {
+    "registeredName": "demouplk",
+    "exampleTx": "https://sepolia.basescan.org/tx/0xd62c005528b5308db3177c575e2e73de06d89304eaac3ba229ac316cc4cd5857"
+  }
+}
