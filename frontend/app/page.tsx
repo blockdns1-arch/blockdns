@@ -25,26 +25,26 @@ const uses = [
 ];
 
 const portals = [
-  {
+    {
     icon: "🔍",
     title: "Layer 2 explorer",
     desc: "Blocks & transactions",
-    href: "http://localhost:3001/explorer",
-    tag: "localhost:3001",
+    href: "https://blockdns-explorer.vercel.app",
+    tag: "blockdns-explorer.vercel.app",
   },
   {
     icon: "🏛️",
     title: "Foundation",
     desc: "Governance, treasury & grants",
-    href: "http://localhost:3002/foundation",
-    tag: "localhost:3002",
+    href: "https://blockdns-founder.vercel.app",
+    tag: "blockdns-founder.vercel.app",
   },
   {
     icon: "🔄",
     title: "Swap & bridge",
     desc: "Swap ETH ⇄ BDNS · Bridge BDNS",
-    href: "http://localhost:3003/swap",
-    tag: "localhost:3003",
+    href: "https://blockdns-swap.vercel.app",
+    tag: "blockdns-swap.vercel.app",
   },
 ];
 

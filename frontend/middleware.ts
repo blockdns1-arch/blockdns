@@ -16,6 +16,32 @@ async function accessToken(password: string) {
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const hostname = req.nextUrl.hostname;
+
+  const hostedSite =
+    hostname === "blockdns-explorer.vercel.app"
+      ? "/explorer"
+      : hostname === "blockdns-swap.vercel.app"
+        ? "/swap"
+        : hostname === "blockdns-founder.vercel.app"
+          ? "/foundation"
+          : null;
+
+  if (hostedSite) {
+    const allowed =
+      (hostedSite === "/explorer" && pathname.startsWith("/explorer")) ||
+      (hostedSite === "/foundation" && pathname.startsWith("/foundation")) ||
+      (hostedSite === "/swap" && (pathname.startsWith("/swap") || pathname.startsWith("/bridge")));
+
+    if (pathname === "/") {
+      const rewriteUrl = req.nextUrl.clone();
+      rewriteUrl.pathname = hostedSite;
+      return NextResponse.rewrite(rewriteUrl);
+    }
+
+    if (allowed) return NextResponse.next();
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 
   if (process.env.TEAM_ACCESS_PASSWORD && pathname !== "/access" && !pathname.startsWith("/api/access")) {
     const expected = await accessToken(process.env.TEAM_ACCESS_PASSWORD);
