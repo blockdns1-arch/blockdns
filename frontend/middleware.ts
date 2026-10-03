@@ -1,12 +1,56 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const MAIN = "http://localhost:3000";
-const EXPLORER = "http://localhost:3001";
-const FOUNDATION = "http://localhost:3002";
-const SWAP = "http://localhost:3003";
+const MAIN = "https://blockdns-home.vercel.app";
+const EXPLORER = "https://blockdns-explorer.vercel.app";
+const FOUNDATION = "https://blockdns-founder.vercel.app";
+const SWAP = "https://blockdns-swap.vercel.app";
 
-export function middleware(req: NextRequest) {
+const ACCESS_COOKIE = "bdns-team-access";
+const ACCESS_SALT = "blockdns-team-v1";
+
+async function accessToken(password: string) {
+  const data = new TextEncoder().encode(`${ACCESS_SALT}:${password}`);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+}
+
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
+  const hostname = req.nextUrl.hostname;
+
+  const hostedSite =
+    hostname === "blockdns-explorer.vercel.app"
+      ? "/explorer"
+      : hostname === "blockdns-swap.vercel.app"
+        ? "/swap"
+        : hostname === "blockdns-founder.vercel.app"
+          ? "/foundation"
+          : null;
+
+  if (hostedSite) {
+    const allowed =
+      (hostedSite === "/explorer" && pathname.startsWith("/explorer")) ||
+      (hostedSite === "/foundation" && pathname.startsWith("/foundation")) ||
+      (hostedSite === "/swap" && (pathname.startsWith("/swap") || pathname.startsWith("/bridge")));
+
+    if (pathname === "/") {
+      const rewriteUrl = req.nextUrl.clone();
+      rewriteUrl.pathname = hostedSite;
+      return NextResponse.rewrite(rewriteUrl);
+    }
+
+    if (allowed) return NextResponse.next();
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (process.env.TEAM_ACCESS_PASSWORD && pathname !== "/access" && !pathname.startsWith("/api/access")) {
+    const expected = await accessToken(process.env.TEAM_ACCESS_PASSWORD);
+    if (req.cookies.get(ACCESS_COOKIE)?.value !== expected) {
+      const accessUrl = new URL("/access", req.url);
+      accessUrl.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
+      return NextResponse.redirect(accessUrl);
+    }
+  }
   const port = req.nextUrl.port || "3000";
 
   const siteHome: Record<string, string> = {

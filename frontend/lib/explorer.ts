@@ -126,7 +126,7 @@ export const KNOWN_CONTRACTS: Record<string, string> = {
 
 export const client = createPublicClient({
   chain: blockdnsL2,
-  transport: http(process.env.NEXT_PUBLIC_L2_RPC_URL || "http://127.0.0.1:9545"),
+  transport: http(process.env.NEXT_PUBLIC_L2_RPC_URL || "https://sepolia.base.org"),
 });
 
 export function short(hash: string, head = 10, tail = 8): string {
