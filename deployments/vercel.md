@@ -33,6 +33,28 @@ cards and stats. [`frontend/components/Navbar.tsx`](../../frontend/components/Na
 [`frontend/components/SiteLanding.tsx`](../../frontend/components/SiteLanding.tsx) render from it, and
 each site links to its siblings with absolute URLs so the navbar works the same on all four domains.
 
+## Manual setup (no Vercel token)
+
+Everything needed is committed, so the four projects can also be created from the dashboard
+without any API token. The build settings are not typed in by hand:
+[`frontend/vercel.json`](../frontend/vercel.json) already pins the framework, install command,
+build command and output directory, so the dashboard only needs the repository and the env vars.
+
+1. Push this repository to GitHub so Vercel can import it.
+2. In Vercel: **Add New → Project → Import** `blockdns1-arch/blockdns`.
+3. Project name `blockdns-home`, **Root Directory** `frontend`, framework Next.js (detected).
+4. **Environment Variables**: paste the `blockdns-home` block from
+   [`vercel-env.md`](vercel-env.md), then Deploy.
+5. Repeat for `blockdns-swap`, `blockdns-explorer` and `blockdns-founder`, using the matching
+   block each time. The only difference between the four is `NEXT_PUBLIC_SITE`.
+6. Project → Settings → Deployment Protection → **Disabled**, otherwise the URLs ask for a login.
+
+The env file is generated from the deployment manifest, so after a redeploy refresh it with:
+
+```bash
+npm run vercel:env > deployments/vercel-env.md
+```
+
 ## Team accounts and keeping the sites public
 
 The four projects usually live in a Vercel team, and a team-scoped token must send `teamId` on

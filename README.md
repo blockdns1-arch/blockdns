@@ -292,6 +292,10 @@ The projects live in the Vercel team, and the script resolves the team from its 
 clears Vercel deployment protection (password / Vercel Authentication) so all four URLs stay
 publicly reachable — pass `--keep-protection` to skip that.
 
+No Vercel token? The setup is fully manual-ready: [`frontend/vercel.json`](frontend/vercel.json) pins
+the build settings and [`deployments/vercel-env.md`](deployments/vercel-env.md) holds the exact env
+vars per project (`npm run vercel:env` regenerates it).
+
 Details: [`deployments/vercel.md`](deployments/vercel.md).
 
 ---
