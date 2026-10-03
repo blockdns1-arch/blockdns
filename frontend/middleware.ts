@@ -18,6 +18,15 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hostname = req.nextUrl.hostname;
 
+  if (process.env.TEAM_ACCESS_PASSWORD && pathname !== "/access" && !pathname.startsWith("/api/access")) {
+    const expected = await accessToken(process.env.TEAM_ACCESS_PASSWORD);
+    if (req.cookies.get(ACCESS_COOKIE)?.value !== expected) {
+      const accessUrl = new URL("/access", req.url);
+      accessUrl.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
+      return NextResponse.redirect(accessUrl);
+    }
+  }
+
   const hostedSite =
     hostname === "blockdns-explorer.vercel.app"
       ? "/explorer"
@@ -43,14 +52,6 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  if (process.env.TEAM_ACCESS_PASSWORD && pathname !== "/access" && !pathname.startsWith("/api/access")) {
-    const expected = await accessToken(process.env.TEAM_ACCESS_PASSWORD);
-    if (req.cookies.get(ACCESS_COOKIE)?.value !== expected) {
-      const accessUrl = new URL("/access", req.url);
-      accessUrl.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
-      return NextResponse.redirect(accessUrl);
-    }
-  }
   const port = req.nextUrl.port || "3000";
 
   const siteHome: Record<string, string> = {
