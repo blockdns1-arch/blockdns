@@ -33,13 +33,37 @@ cards and stats. [`frontend/components/Navbar.tsx`](../../frontend/components/Na
 [`frontend/components/SiteLanding.tsx`](../../frontend/components/SiteLanding.tsx) render from it, and
 each site links to its siblings with absolute URLs so the navbar works the same on all four domains.
 
+## Team accounts and keeping the sites public
+
+The four projects usually live in a Vercel team, and a team-scoped token must send `teamId` on
+every request. The script handles that for you:
+
+```bash
+npm run deploy:vercel -- --team=kinma39ol1        # team slug, as it appears in vercel.com/<slug>
+# or
+$env:VERCEL_TEAM_SLUG = 'kinma39ol1'
+npm run deploy:vercel
+```
+
+If neither `VERCEL_TEAM_ID` nor `--team`/`VERCEL_TEAM_SLUG` is given, the script lists the teams
+the token can reach and, when there is exactly one, uses it automatically. With more than one it
+stops and asks which team to use, because creating the projects without the right `teamId` would
+put them in the wrong account. The token itself must be created from inside the team
+(`vercel.com/<team>/settings/tokens`) so it carries the team scope.
+
+Team plans can turn on **deployment protection** — a Vercel password, Vercel Authentication or
+OIDC — which would put a login prompt in front of all four URLs and hide the project from judges.
+The script reads the protection settings of every project and removes them by default; pass
+`--keep-protection` to leave them alone. Equivalent dashboard path:
+**Project → Settings → Deployment Protection → Disabled**.
+
 ## Deploying
 
 ```bash
 # 1. Create a token at https://vercel.com/account/tokens, then either
 $env:VERCEL_TOKEN = 'xxx'          # PowerShell, current session
 # or add VERCEL_TOKEN=xxx to the gitignored base-deploy.env at the repo root.
-# If the token is scoped to a team, also set VERCEL_TEAM_ID.
+# For a team token, also pass --team=<slug> or set VERCEL_TEAM_SLUG=<slug>.
 
 # 2. Preview the plan without touching Vercel
 npm run deploy:vercel -- --dry-run
@@ -55,6 +79,8 @@ Useful flags:
 | `--dry-run` | Prints the plan, never writes to Vercel |
 | `--skip-deploy` | Creates and configures the projects without building them |
 | `--only=blockdns-swap` | Limits the run to one project |
+| `--team=<slug>` | Team that owns the projects, resolved to a team id |
+| `--keep-protection` | Leaves password/SSO protection enabled instead of making sites public |
 
 The script is idempotent: existing projects are patched to the settings above, environment
 variables are only rewritten when the value actually changed, and a production deploy is triggered

@@ -55,10 +55,17 @@ const value = (name, fallback) => {
 };
 const DRY_RUN = flag("dry-run");
 const SKIP_DEPLOY = flag("skip-deploy");
+// Judges must be able to open the four URLs without a login, so protection removal is
+// the default. Pass --keep-protection to leave password or SSO protection in place.
+const PUBLIC_SITES = !flag("keep-protection");
 const ONLY = value("only")
   ?.split(",")
   .map((entry) => entry.trim())
   .filter(Boolean);
+// Team-scoped Vercel accounts need the team on every call. The numeric team id is
+// awkward to find by hand, so accept the slug from the project URL instead and
+// resolve it, and fall back to auto-detection when the token sees exactly one team.
+const TEAM_SLUG = value("team", process.env.VERCEL_TEAM_SLUG?.trim() || "").replace(/^https?:\/\/vercel\.com\//, "");
 
 function readToken() {
   if (process.env.VERCEL_TOKEN) return process.env.VERCEL_TOKEN.trim();
@@ -72,11 +79,11 @@ function readToken() {
 }
 
 const TOKEN = readToken();
-const TEAM_ID = process.env.VERCEL_TEAM_ID?.trim() || "";
+let teamId = process.env.VERCEL_TEAM_ID?.trim() || "";
 
 function apiUrl(pathname, query = {}) {
   const url = new URL(pathname, API);
-  if (TEAM_ID) url.searchParams.set("teamId", TEAM_ID);
+  if (teamId) url.searchParams.set("teamId", teamId);
   for (const [key, entry] of Object.entries(query)) url.searchParams.set(key, entry);
   return url.toString();
 }
@@ -160,6 +167,56 @@ async function findProject(name) {
   return result;
 }
 
+// A team-scoped token must send teamId on every request. Accept the slug that
+// appears in vercel.com/<slug>/... and resolve it to the numeric id.
+async function resolveTeam() {
+  if (teamId) return `VERCEL_TEAM_ID (${teamId})`;
+  if (TEAM_SLUG) {
+    const team = await call("GET", `/v2/teams/${encodeURIComponent(TEAM_SLUG)}`);
+    teamId = String(team.id);
+    return `team slug "${TEAM_SLUG}" -> ${team.name || team.slug} (${teamId})`;
+  }
+
+  const listed = await call("GET", "/v2/teams", { query: { limit: 20 } });
+  const teams = listed.teams || [];
+  if (teams.length === 1) {
+    teamId = String(teams[0].id);
+    return `auto-detected the only team this token can use: ${teams[0].name || teams[0].slug} (${teamId})`;
+  }
+  if (teams.length === 0) return "personal account (no team scope)";
+  throw new Error(
+    `this token can use ${teams.length} teams (${teams.map((team) => team.slug).join(", ")}).\n` +
+      "Pass the one to use with --team=<slug> or VERCEL_TEAM_SLUG=<slug>. Projects created without\n" +
+      "the right teamId would land in the wrong account."
+  );
+}
+
+// Judges must be able to open the sites without a login. Team plans can enable
+// deployment protection (password or Vercel authentication), which would hide all four
+// URLs behind a prompt, so surface it instead of silently shipping a locked site.
+function protectionIssue(project) {
+  const name = project?.name || project?.projectId || "project";
+  if (project?.passwordProtection) {
+    return `${name}: Vercel password protection is ON - the site is not publicly reachable`;
+  }
+  const sso = project?.ssoProtection;
+  if (sso && (sso.enabled === true || Object.keys(sso).length > 0)) {
+    return `${name}: Vercel Authentication (SSO) protection is ON - the site is not publicly reachable`;
+  }
+  if (project?.oidc && (project.oidc.enabled === true || Object.keys(project.oidc).length > 0)) {
+    return `${name}: OIDC protection is ON - the site is not publicly reachable`;
+  }
+  return "";
+}
+
+function disableProtection(id) {
+  // Deployment Protection is disabled by clearing every protection field.
+  return call("PATCH", `/v9/projects/${id}`, {
+    query: { skipAutoDetectionConfirmation: "1" },
+    body: { ssoProtection: null, oidc: null, passwordProtection: null },
+  });
+}
+
 async function createProject(site) {
   return call("POST", "/v10/projects", {
     body: {
@@ -234,7 +291,7 @@ async function main() {
           "  $env:VERCEL_TOKEN='xxx'   # PowerShell",
           "or add VERCEL_TOKEN=xxx to the gitignored base-deploy.env at the repo root.",
           "",
-          "If the token belongs to a team scope, also set VERCEL_TEAM_ID.",
+          "If the token belongs to a team, pass its slug: --team=<slug> or VERCEL_TEAM_SLUG=<slug>.",
         ].join("\n")
       );
       process.exitCode = 1;
@@ -244,6 +301,7 @@ async function main() {
   } else {
     const whoami = await call("GET", "/v2/user");
     console.log(`authenticated as ${whoami.user?.username || whoami.user?.email || "unknown"}`);
+    console.log(`scope: ${await resolveTeam()}`);
   }
 
   console.log(
@@ -255,6 +313,7 @@ async function main() {
   if (sites.length === 0) throw new Error(`--only matched no project, expected one of: ${SITES.map((s) => s.project).join(", ")}`);
 
   const summary = [];
+  const protection = [];
 
   for (const site of sites) {
     console.log(`\n${site.project} (NEXT_PUBLIC_SITE=${site.site})`);
@@ -291,6 +350,23 @@ async function main() {
       console.log(`  would sync env: ${Object.keys(env).length} vars (NEXT_PUBLIC_SITE=${site.site}, ${Object.keys(ADDRESS_ENV).length} addresses)`);
     }
 
+    const locked = protectionIssue(project);
+    if (locked) {
+      protection.push(locked);
+      if (PUBLIC_SITES) {
+        if (DRY_RUN) {
+          console.log(`  would remove deployment protection (${locked})`);
+        } else {
+          await disableProtection(project.id);
+          console.log("  removed deployment protection so the site is public");
+        }
+      } else {
+        console.log(`  WARNING ${locked}`);
+      }
+    } else if (!DRY_RUN) {
+      console.log("  deployment protection: off (public)");
+    }
+
     if (SKIP_DEPLOY || DRY_RUN) {
       console.log("  deploy skipped");
       summary.push({ ...site, action: created ? "created" : "updated", url: `https://${site.project}.vercel.app` });
@@ -312,6 +388,19 @@ async function main() {
   for (const entry of summary) {
     console.log(`  ${entry.project.padEnd(20)} NEXT_PUBLIC_SITE=${entry.site.padEnd(9)} ${entry.url}${entry.deploy ? ` (${entry.deploy})` : ""}`);
   }
+
+  if (protection.length > 0) {
+    console.log("\ndeployment protection");
+    for (const issue of protection) console.log(`  ${issue}`);
+    if (!PUBLIC_SITES) {
+      console.log(
+        "\n  The four URLs must be open to anyone, otherwise nobody outside the team can judge them.\n" +
+          "  Re-run with --public to remove protection, or set it to Disabled in the Vercel dashboard\n" +
+          "  under Project > Settings > Deployment Protection."
+      );
+    }
+  }
+
   if (!DRY_RUN && !SKIP_DEPLOY) {
     console.log("\nEvery project redeploys automatically on each push to " + BRANCH + ".");
   }
@@ -323,6 +412,12 @@ main().catch((error) => {
     console.error(
       "\nThe token cannot see the GitHub repository. Install the Vercel GitHub App on the repo\n" +
         "(vercel.com/settings/integrations) or run the script with a token from that account."
+    );
+  }
+  if (/team/i.test(error.message) && /scope|access|forbidden/i.test(error.message)) {
+    console.error(
+      "\nThe token does not have access to that team. Create the token from inside the team\n" +
+        "(vercel.com/<team>/settings/tokens) so it carries the team scope."
     );
   }
   process.exitCode = 1;

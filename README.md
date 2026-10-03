@@ -285,7 +285,12 @@ One frontend, four Vercel projects built from `frontend/` with the same settings
 ```bash
 npm run deploy:vercel -- --dry-run   # preview the plan
 npm run deploy:vercel               # create/update the four projects and deploy
+npm run deploy:vercel -- --team=<slug>   # for a team-scoped Vercel token
 ```
+
+The projects live in the Vercel team, and the script resolves the team from its slug. It also
+clears Vercel deployment protection (password / Vercel Authentication) so all four URLs stay
+publicly reachable — pass `--keep-protection` to skip that.
 
 Details: [`deployments/vercel.md`](deployments/vercel.md).
 
