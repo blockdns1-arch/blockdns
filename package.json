@@ -29,7 +29,8 @@
     "watch:events": "hardhat run scripts/watch-events.ts --network l2",
     "watch:events:local": "hardhat run scripts/watch-events.ts --network hardhat",
     "pdf:whitepaper": "node scripts/generate-whitepaper-pdf.js",
-    "verify:etherscan": "hardhat run scripts/verify-etherscan.ts --network base-sepolia"
+    "verify:etherscan": "hardhat run scripts/verify-etherscan.ts --network base-sepolia",
+    "deploy:vercel": "node scripts/deploy-vercel.mjs"
   },
   "dependencies": {
     "@openzeppelin/contracts": "5.1.0"

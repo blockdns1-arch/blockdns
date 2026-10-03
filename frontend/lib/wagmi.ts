@@ -6,7 +6,7 @@ import {
 import { createConfig, http } from "wagmi";
 import { blockdnsL2 } from "./chains";
 
-const projectId = "blockdns-local-no-wc";
+const projectId = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || "";
 
 const connectors = connectorsForWallets(
   [

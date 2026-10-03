@@ -1,52 +1,31 @@
-import { ArrowRight, Flame, ExternalLink } from "lucide-react";
+import { ArrowRight, Compass, ExternalLink, Flame, Globe, Landmark, Repeat, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import DomainSearch from "@/components/DomainSearch";
 import Reveal from "@/components/Reveal";
 import TokenEmblem from "@/components/TokenEmblem";
 import MiniExplorer from "@/components/MiniExplorer";
+import SiteLanding from "@/components/SiteLanding";
 import WhitepaperArticle from "@/components/WhitepaperArticle";
+import { allSites, getSite, type SiteConfig } from "@/lib/sites";
 
-const uses = [
-  {
-    emoji: "🌐",
-    title: "IPFS hosting",
-    body: "Pin a file or a site and your .bdns resolves to it over any IPFS gateway — free forever.",
-  },
-  {
-    emoji: "👛",
-    title: "Multi-wallet binding",
-    body: "Store your ETH, BTC and SOL addresses on-chain, all under a single domain you own.",
-  },
-  {
-    emoji: "♾️",
-    title: "Lifetime ownership",
-    body: "A single mint. No annual fees, no renewals, no rent — your corner of the internet, forever.",
-  },
-];
+const FEATURE_ICONS = {
+  globe: Globe,
+  compass: Compass,
+  repeat: Repeat,
+  landmark: Landmark,
+  flame: Flame,
+  shield: ShieldCheck,
+} as const;
 
-const portals = [
-  {
-    icon: "🔍",
-    title: "Layer 2 explorer",
-    desc: "Blocks & transactions",
-    href: "http://localhost:3001/explorer",
-    tag: "localhost:3001",
-  },
-  {
-    icon: "🏛️",
-    title: "Foundation",
-    desc: "Governance, treasury & grants",
-    href: "http://localhost:3002/foundation",
-    tag: "localhost:3002",
-  },
-  {
-    icon: "🔄",
-    title: "Swap & bridge",
-    desc: "Swap ETH ⇄ BDNS · Bridge BDNS",
-    href: "http://localhost:3003/swap",
-    tag: "localhost:3003",
-  },
-];
+const portals = (sites: SiteConfig[]) =>
+  sites
+    .filter((site) => site.id !== "home")
+    .map((site) => ({
+      title: site.badge ?? "BlockDNS",
+      desc: site.tagline,
+      href: `${site.domain}${site.primary}`,
+      tag: site.project,
+    }));
 
 export default async function Home({
   searchParams,
@@ -54,6 +33,9 @@ export default async function Home({
   searchParams: Promise<{ name?: string }>;
 }) {
   const { name } = await searchParams;
+  const site = getSite();
+
+  if (site.id !== "home") return <SiteLanding site={site} />;
 
   return (
     <div className="flex flex-col items-center gap-16">
@@ -141,19 +123,19 @@ export default async function Home({
           </h2>
         </div>
         <p className="mx-auto -mt-4 mb-6 max-w-xl text-center text-sm text-zinc-400">
-          Each portal runs on its own localhost port — hop between them like real
-          independent products.
+          Four independent deployments built from this one verified codebase — hop between
+          them like real separate products.
         </p>
         <div className="grid gap-4 sm:grid-cols-3">
-          {portals.map((p, i) => (
-            <Reveal key={p.title} delay={0.1 * i}>
-              <Link
+          {portals(allSites()).map((p) => (
+            <Reveal key={p.title} delay={0.1 * 0}>
+              <a
                 href={p.href}
                 className="eth-card eth-card-hover eth-corners flex h-full flex-col gap-3 p-6"
               >
                 <div className="flex items-center justify-between">
-                  <div className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04] text-2xl">
-                    {p.icon}
+                  <div className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04]">
+                    <Compass size={20} className="text-[#b6bdff]" />
                   </div>
                   <ExternalLink size={16} className="text-zinc-500" />
                 </div>
@@ -164,7 +146,7 @@ export default async function Home({
                 <span className="mono mt-auto inline-flex w-fit items-center rounded-full border border-white/10 bg-white/[0.03] px-2 py-0.5 text-[11px] text-emerald-300">
                   ▸ {p.tag}
                 </span>
-              </Link>
+              </a>
             </Reveal>
           ))}
         </div>
@@ -177,17 +159,20 @@ export default async function Home({
           </h2>
         </div>
         <div className="grid gap-4 sm:grid-cols-3">
-          {uses.map((c, i) => (
+          {site.features.map((c, i) => {
+            const Icon = FEATURE_ICONS[c.icon];
+            return (
             <Reveal key={c.title} delay={0.1 * i}>
               <div className="eth-card eth-card-hover eth-corners h-full p-6">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04] text-2xl">
-                  {c.emoji}
+                <div className="grid h-12 w-12 place-items-center rounded-2xl border border-white/10 bg-white/[0.04]">
+                  <Icon size={20} className="text-[#b6bdff]" />
                 </div>
                 <h3 className="mt-4 font-semibold">{c.title}</h3>
                 <p className="mt-1 text-sm leading-relaxed text-zinc-400">{c.body}</p>
               </div>
             </Reveal>
-          ))}
+            );
+          })}
         </div>
       </section>
 

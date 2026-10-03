@@ -204,6 +204,9 @@ Secrets are never committed: `.env`, `base-deploy.env`, `social-agent/.env` are 
 | `npm run deploy:phase2` | marketplace + swap + bridge |
 | `npm run deploy:tokenomics` | vesting + staking |
 | `npm run merkle:generate` | build the airdrop Merkle root |
+| `npm run deploy:vercel` | create/update the four Vercel projects and deploy (`--dry-run`, `--skip-deploy`, `--only=<project>`) |
+| `npm run manifest:export` | regenerate `deployments/public/<network>.json` |
+| `npm run verify:sourcify` / `verify:etherscan` | verify the deployed contracts |
 | `npm run watch:events` | stream registry events (use `:local` for the hardhat chain) |
 | `npm run pdf:whitepaper` | render `WHITEPAPER.md` to `Whitepaper.pdf` |
 | `npm run social:*` | social agent (Telegram / X / Farcaster) helpers |
@@ -267,6 +270,25 @@ Constructor arguments for the live Base Sepolia deployment are recorded next to 
 
 `/mint` (register a name) · `/market` (marketplace) · `/swap` (token swap) · `/bridge` (L1 ↔ L2) · `/explorer` + `/explorer/tx/[hash]` + `/explorer/block/[number]` · `/dashboard` · `/foundation` · `/whitepaper`
 
+## Live sites
+
+One frontend, four Vercel projects built from `frontend/` with the same settings — only
+`NEXT_PUBLIC_SITE` differs, so each domain has its own branding, navigation and landing copy.
+
+| Project | URL | Site |
+| --- | --- | --- |
+| `blockdns-home` | https://blockdns-home.vercel.app | Domains, mint, market, dashboard |
+| `blockdns-swap` | https://blockdns-swap.vercel.app | Swap and bridge |
+| `blockdns-explorer` | https://blockdns-explorer.vercel.app | Blocks, transactions, name lookups |
+| `blockdns-founder` | https://blockdns-founder.vercel.app | Foundation, tokenomics, whitepaper |
+
+```bash
+npm run deploy:vercel -- --dry-run   # preview the plan
+npm run deploy:vercel               # create/update the four projects and deploy
+```
+
+Details: [`deployments/vercel.md`](deployments/vercel.md).
+
 ---
 
 ## Documentation
@@ -275,6 +297,7 @@ Constructor arguments for the live Base Sepolia deployment are recorded next to 
 - [`Whitepaper.pdf`](Whitepaper.pdf) — rendered version
 - [`gateway/README.md`](gateway/README.md) — gateway architecture and security model
 - [`deployments/README.md`](deployments/README.md) — public deployment manifests and verification
+- [`deployments/vercel.md`](deployments/vercel.md) — the four Vercel projects and how they are deployed
 - [`GRANTS/`](GRANTS) — hackathon and grant submissions
 
 ## License

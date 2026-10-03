@@ -4,12 +4,15 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { getSite } from "@/lib/sites";
 
-export const metadata: Metadata = {
-  title: "BlockDNS — Own your .bdns domain forever",
-  description:
-    "Lifetime free .bdns domains on the BlockDNS L2 chain. Mint, host on IPFS, bind multi-chain wallets.",
-};
+export function generateMetadata(): Metadata {
+  const site = getSite();
+  return {
+    title: site.badge ? `BlockDNS ${site.badge} — ${site.tagline}` : `BlockDNS — ${site.tagline}`,
+    description: site.description,
+  };
+}
 
 export default function RootLayout({
   children,
