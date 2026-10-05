@@ -5,27 +5,9 @@ const EXPLORER = "https://blockdns-explorer.vercel.app";
 const FOUNDATION = "https://blockdns-founder.vercel.app";
 const SWAP = "https://blockdns-swap.vercel.app";
 
-const ACCESS_COOKIE = "bdns-team-access";
-const ACCESS_SALT = "blockdns-team-v1";
-
-async function accessToken(password: string) {
-  const data = new TextEncoder().encode(`${ACCESS_SALT}:${password}`);
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
-}
-
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const hostname = req.nextUrl.hostname;
-
-  if (process.env.TEAM_ACCESS_PASSWORD && pathname !== "/access" && !pathname.startsWith("/api/access")) {
-    const expected = await accessToken(process.env.TEAM_ACCESS_PASSWORD);
-    if (req.cookies.get(ACCESS_COOKIE)?.value !== expected) {
-      const accessUrl = new URL("/access", req.url);
-      accessUrl.searchParams.set("next", `${pathname}${req.nextUrl.search}`);
-      return NextResponse.redirect(accessUrl);
-    }
-  }
 
   const hostedSite =
     hostname === "blockdns-explorer.vercel.app"

@@ -160,8 +160,8 @@ No fake screenshots: use a capture of the live explorer with a real block number
       missing credentials; run `gh auth login` in your own terminal.
 - [ ] Redeploy all four Vercel projects from the merged main. `swap`, `explorer` and `finder` return
       404 today.
-- [ ] Confirm `TEAM_ACCESS_PASSWORD` is **not** set on any of the four projects, or every judge hits
-      a password wall.
+- [ ] Confirm all four sites load without a login. The team password gate was removed from
+      `frontend/middleware.ts`, so only Vercel deployment protection can hide them.
 - [ ] Confirm Vercel deployment protection is off, or the links 401.
 - [ ] Rotate the Etherscan API key that was pasted in plaintext. Re-verify if the old one is revoked.
 - [ ] Record the video after the redeploys, then fill in the demo links table with the four live URLs.
