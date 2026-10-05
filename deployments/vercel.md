@@ -25,6 +25,15 @@ Every project uses the identical build configuration:
 | Output Directory | `.next` |
 | Framework preset | Next.js |
 
+**Root Directory must be `frontend`.** The repository root is the contracts package
+(`blockdns-contracts`, `npm run build` = `hardhat compile`), so a project whose root directory is the
+repo root builds Solidity instead of Next.js and fails with a missing output directory. There is no
+`vercel.json` at the repo root on purpose: `frontend/vercel.json` is the single build config, and it
+only applies once the root directory is `frontend`.
+
+Check on an existing project: **Project → Settings → General → Root Directory = `frontend`, Framework
+Preset = Next.js**, then redeploy the latest `main` commit.
+
 ## Why the four URLs are not identical
 
 `NEXT_PUBLIC_SITE` is the only per-project difference. [`frontend/lib/sites.ts`](../../frontend/lib/sites.ts)
