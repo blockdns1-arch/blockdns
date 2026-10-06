@@ -34,6 +34,16 @@ export type DomainRecord = {
   SOL: string;
 };
 
+export type SiteResolution = {
+  name: string;
+  tokenId: bigint;
+  owner: string;
+  url: string;
+  site: string;
+  eth: string;
+  cid: string;
+};
+
 export type PriceQuote = {
   name: string;
   price: bigint | null;
@@ -268,6 +278,79 @@ export function useBlockDNS() {
   const [domainsLoading, setDomainsLoading] = useState(false);
   const [domainsError, setDomainsError] = useState<string | null>(null);
 
+  const resolveSite = useCallback(
+    async (raw: string): Promise<SiteResolution | null> => {
+      const name = normalizeName(raw);
+      if (!rooted || !isValidName(name)) return null;
+      try {
+        const tokenId = await readContract(config, {
+          address: REGISTRY_ADDRESS,
+          abi: REGISTRY_ABI,
+          functionName: "resolveName",
+          args: [name],
+        });
+        if (tokenId === 0n) return null;
+        const results = await readContracts(config, {
+          contracts: [
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "ownerOf" as const,
+              args: [tokenId] as const,
+            },
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "customTXTRecords" as const,
+              args: [tokenId, "url"] as const,
+            },
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "customTXTRecords" as const,
+              args: [tokenId, "site"] as const,
+            },
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "addressRecords" as const,
+              args: [tokenId, "eth"] as const,
+            },
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "addressRecords" as const,
+              args: [tokenId, "ETH"] as const,
+            },
+            {
+              address: REGISTRY_ADDRESS,
+              abi: REGISTRY_ABI,
+              functionName: "ipfsCIDOf" as const,
+              args: [tokenId] as const,
+            },
+          ],
+        });
+        const [owner, url, site, ethLower, ethUpper, cid] = results.map((r) =>
+          unwrapResult(r)
+        );
+        return {
+          name,
+          tokenId,
+          owner: typeof owner === "string" ? owner : "",
+          url: typeof url === "string" ? url : "",
+          site: typeof site === "string" ? site : "",
+          eth:
+            (typeof ethLower === "string" && ethLower) ||
+            (typeof ethUpper === "string" ? ethUpper : ""),
+          cid: typeof cid === "string" ? cid : "",
+        };
+      } catch {
+        return null;
+      }
+    },
+    [rooted]
+  );
+
   const refreshDomains = useCallback(
     async (owner: `0x${string}`) => {
       if (!rooted) return;
@@ -373,6 +456,7 @@ export function useBlockDNS() {
     activeChainId,
     rooted,
     getQuote,
+    resolveSite,
     registerDomain,
     approveBDNS,
     setIPFSRecord,

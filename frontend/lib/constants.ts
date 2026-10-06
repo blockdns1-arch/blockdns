@@ -1,3 +1,5 @@
+import { DEPLOYMENT } from "@/lib/deployment";
+
 const ZERO = "0x0000000000000000000000000000000000000000";
 
 function address(value: string | undefined): `0x${string}` {
@@ -6,34 +8,39 @@ function address(value: string | undefined): `0x${string}` {
 }
 
 export const REGISTRY_ADDRESS = address(
-  process.env.NEXT_PUBLIC_REGISTRY_ADDRESS
+  process.env.NEXT_PUBLIC_REGISTRY_ADDRESS || DEPLOYMENT.registry
 );
 
-export const PRICER_ADDRESS = address(process.env.NEXT_PUBLIC_PRICER_ADDRESS);
+export const PRICER_ADDRESS = address(
+  process.env.NEXT_PUBLIC_PRICER_ADDRESS || DEPLOYMENT.pricer
+);
 
 export const BDNS_ADDRESS = address(
-  process.env.NEXT_PUBLIC_BDNS_ADDRESS ||
-    "0x420000000000000000000000000000000000000B"
+  process.env.NEXT_PUBLIC_BDNS_ADDRESS || DEPLOYMENT.bdns
 );
 
 export const MARKET_ADDRESS = address(
-  process.env.NEXT_PUBLIC_MARKET_ADDRESS
+  process.env.NEXT_PUBLIC_MARKET_ADDRESS || DEPLOYMENT.market
 );
 
 export const BURN_ENGINE_ADDRESS = address(
-  process.env.NEXT_PUBLIC_BURN_ENGINE_ADDRESS
+  process.env.NEXT_PUBLIC_BURN_ENGINE_ADDRESS || DEPLOYMENT.burnEngine
 );
 
 export const STAKING_VAULT_ADDRESS = address(
-  process.env.NEXT_PUBLIC_STAKING_VAULT_ADDRESS
+  process.env.NEXT_PUBLIC_STAKING_VAULT_ADDRESS || DEPLOYMENT.stakingVault
 );
 
-export const SWAP_ADDRESS = address(process.env.NEXT_PUBLIC_SWAP_ADDRESS);
+export const SWAP_ADDRESS = address(
+  process.env.NEXT_PUBLIC_SWAP_ADDRESS || DEPLOYMENT.swap
+);
 
-export const BRIDGE_ADDRESS = address(process.env.NEXT_PUBLIC_BRIDGE_ADDRESS);
+export const BRIDGE_ADDRESS = address(
+  process.env.NEXT_PUBLIC_BRIDGE_ADDRESS || DEPLOYMENT.bridge
+);
 
 export const EXPLORER_URL =
-  process.env.NEXT_PUBLIC_EXPLORER_URL || "";
+  process.env.NEXT_PUBLIC_EXPLORER_URL || DEPLOYMENT.explorerUrl;
 
 export const IPFS_GATEWAY =
   process.env.NEXT_PUBLIC_IPFS_GATEWAY || "https://gateway.pinata.cloud";

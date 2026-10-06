@@ -6,6 +6,7 @@ import {
   type Transaction,
 } from "viem";
 import { blockdnsL2 } from "@/lib/chains";
+import { DEPLOYMENT } from "@/lib/deployment";
 import {
   REGISTRY_ADDRESS,
   PRICER_ADDRESS,
@@ -29,12 +30,10 @@ import {
 } from "@/lib/abi";
 
 const SPLITTER_ADDRESS = (
-  process.env.NEXT_PUBLIC_SPLITTER_ADDRESS ||
-  "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+  process.env.NEXT_PUBLIC_SPLITTER_ADDRESS || DEPLOYMENT.splitter
 ) as string;
 const RESOLVER_ADDRESS = (
-  process.env.NEXT_PUBLIC_RESOLVER_ADDRESS ||
-  "0xc3e53F4d16Ae77Db1c982e75a937B9f60FE63690"
+  process.env.NEXT_PUBLIC_RESOLVER_ADDRESS || DEPLOYMENT.resolver
 ) as string;
 
 const SPLITTER_ABI = [
@@ -107,8 +106,7 @@ export interface ContractLabel {
 }
 
 const MESSENGER_LINE_RAW =
-  process.env.NEXT_PUBLIC_MESSENGER_ADDRESS ||
-  "0xd04b98f48e80f7c7f2824f8efdd6e1d8b1c0e7f2";
+  process.env.NEXT_PUBLIC_MESSENGER_ADDRESS || DEPLOYMENT.messenger;
 
 export const KNOWN_CONTRACTS: Record<string, string> = {
   [BDNS_ADDRESS.toLowerCase()]: "BDNS Token (ERC20)",
@@ -126,7 +124,7 @@ export const KNOWN_CONTRACTS: Record<string, string> = {
 
 export const client = createPublicClient({
   chain: blockdnsL2,
-  transport: http(process.env.NEXT_PUBLIC_L2_RPC_URL || "https://sepolia.base.org"),
+  transport: http(process.env.NEXT_PUBLIC_L2_RPC_URL || DEPLOYMENT.rpcUrl),
 });
 
 export function short(hash: string, head = 10, tail = 8): string {

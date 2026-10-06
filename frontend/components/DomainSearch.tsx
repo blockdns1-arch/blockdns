@@ -8,15 +8,18 @@ import {
   Loader2,
   Search,
   Sparkles,
-  XCircle,
 } from "lucide-react";
 import {
   useBlockDNS,
   normalizeName,
   isValidName,
   type PriceQuote,
+  type SiteResolution,
 } from "@/hooks/useBlockDNS";
 import { formatBDNS } from "@/lib/constants";
+
+const short = (value: string) =>
+  value ? `${value.slice(0, 6)}…${value.slice(-4)}` : "";
 
 export default function DomainSearch({
   initialName = "",
@@ -27,10 +30,11 @@ export default function DomainSearch({
   onSelect?: (name: string) => void;
   autoFocus?: boolean;
 }) {
-  const { getQuote, rooted } = useBlockDNS();
+  const { getQuote, rooted, resolveSite } = useBlockDNS();
   const router = useRouter();
   const [raw, setRaw] = useState(initialName);
   const [quote, setQuote] = useState<PriceQuote | null>(null);
+  const [site, setSite] = useState<SiteResolution | null>(null);
   const [checking, setChecking] = useState(false);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -39,6 +43,7 @@ export default function DomainSearch({
       const name = normalizeName(value);
       if (!name) {
         setQuote(null);
+        setSite(null);
         return;
       }
       if (!isValidName(name)) {
@@ -49,11 +54,16 @@ export default function DomainSearch({
           available: false,
           error: "invalid",
         });
+        setSite(null);
         return;
       }
       setChecking(true);
       try {
-        setQuote(await getQuote(name));
+        const next = await getQuote(name);
+        setQuote(next);
+        setSite(
+          next.error === null && !next.available ? await resolveSite(name) : null
+        );
       } finally {
         setChecking(false);
       }
@@ -193,13 +203,58 @@ export default function DomainSearch({
             initial={{ opacity: 0, y: -6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="mt-4 flex items-center gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 px-5 py-4 text-rose-300"
+            className="mt-4 rounded-2xl border border-violet-500/30 bg-violet-500/10 px-5 py-4"
           >
-            <XCircle size={22} />
-            <p>
-              <span className="font-semibold">{name}.bdns</span> is already
-              registered. Try another name.
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex min-w-0 items-start gap-3">
+                <CheckCircle2 size={22} className="shrink-0 text-violet-400" />
+                <div className="min-w-0">
+                  <p className="font-semibold">
+                    {name}.bdns is live
+                    {site?.site ? (
+                      <span className="ml-2 rounded-md bg-white/10 px-1.5 py-0.5 text-xs font-medium text-zinc-300">
+                        /{site.site}
+                      </span>
+                    ) : null}
+                  </p>
+                  <p className="truncate text-sm text-violet-200/80">
+                    {site?.url ? (
+                      <a
+                        href={site.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline decoration-dotted hover:text-white"
+                      >
+                        {site.url.replace(/^https?:\/\//, "")}
+                      </a>
+                    ) : (
+                      "on-chain record · no site URL set"
+                    )}
+                  </p>
+                  <p className="mt-1 text-xs text-zinc-400">
+                    owner {site?.owner ? short(site.owner) : "—"}
+                    {site?.eth ? ` · eth ${short(site.eth)}` : ""}
+                    {site?.cid ? ` · ipfs ${site.cid.slice(0, 10)}…` : ""}
+                  </p>
+                </div>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                {site?.url ? (
+                  <a
+                    href={site.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="eth-btn bg-white px-5 py-2.5 text-sm text-zinc-950 hover:bg-zinc-100"
+                  >
+                    Open site ↗
+                  </a>
+                ) : null}
+                <GoButton
+                  onClick={() => router.push(`/explorer?name=${encodeURIComponent(name)}`)}
+                  label="View record"
+                />
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
