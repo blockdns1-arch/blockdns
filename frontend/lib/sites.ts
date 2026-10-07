@@ -227,6 +227,33 @@ const BASE: Record<SiteId, Omit<SiteConfig, "domain">> = {
 
 export const SITE_IDS: SiteId[] = ["home", "swap", "explorer", "founder"];
 
+// Every route prefix belongs to exactly one deployment. A link that crosses that
+// boundary has to be an absolute URL: a relative link hits the middleware redirect,
+// and Next.js then tries to prefetch the cross-origin response, which fails the CORS
+// preflight and logs an error in the browser console.
+const ROUTE_OWNERS: { prefix: string; site: SiteId }[] = [
+  { prefix: "/explorer", site: "explorer" },
+  { prefix: "/swap", site: "swap" },
+  { prefix: "/bridge", site: "swap" },
+  { prefix: "/staking", site: "swap" },
+  { prefix: "/foundation", site: "founder" },
+  { prefix: "/whitepaper", site: "founder" },
+  { prefix: "/mint", site: "home" },
+  { prefix: "/dashboard", site: "home" },
+  { prefix: "/market", site: "home" },
+];
+
+/** Absolute URL when `path` is served by another site, the path itself otherwise. */
+export function crossSiteHref(path: string): string {
+  if (!path.startsWith("/")) return path;
+  const owner = ROUTE_OWNERS.filter(
+    (route) => path === route.prefix || path.startsWith(`${route.prefix}/`)
+  )
+    .sort((a, b) => b.prefix.length - a.prefix.length)[0]?.site;
+  if (!owner || owner === getSite().id) return path;
+  return `${siteUrl(owner)}${path}`;
+}
+
 export function siteUrl(id: SiteId): string {
   const raw = process.env[SITE_ENV[id]] || DEFAULT_DOMAINS[id];
   return raw.replace(/\/$/, "");

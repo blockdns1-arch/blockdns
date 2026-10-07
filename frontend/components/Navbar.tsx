@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Compass, Globe, Landmark, Menu, Moon, Repeat, Sun, X } from "lucide-react";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import TokenEmblem from "@/components/TokenEmblem";
+import SiteLink from "@/components/SiteLink";
 import { BLOCKDNS_CHAIN_ID } from "@/lib/chains";
 import { allSites, getSite, type SiteId } from "@/lib/sites";
 
@@ -212,7 +213,7 @@ function SiteTile({
       <p className="text-xs leading-relaxed text-zinc-400">{desc}</p>
       <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
         {links.map((link) => (
-          <Link
+          <SiteLink
             key={link.href}
             href={`${linkPrefix}${link.href}`}
             className={`rounded-full border px-2.5 py-1 text-[11px] transition-colors ${
@@ -222,7 +223,7 @@ function SiteTile({
             }`}
           >
             {link.label}
-          </Link>
+          </SiteLink>
         ))}
         {external && (
           <span className="mono rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[11px] text-zinc-500">

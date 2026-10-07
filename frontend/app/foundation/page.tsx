@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight, Globe2, Handshake, Landmark, ShieldCheck, Sparkles } from "lucide-react";
-import Link from "next/link";
+import SiteLink from "@/components/SiteLink";
 import TokenEmblem from "@/components/TokenEmblem";
 import { BLOCKDNS_CHAIN_ID } from "@/lib/chains";
 
@@ -159,9 +159,9 @@ export default function FoundationPage() {
             <p className="mt-1 flex-1 text-sm text-zinc-400">
               Claim a free lifetime .bdns and start building your identity on-chain.
             </p>
-            <Link href="/mint" className="eth-link mt-4 flex items-center gap-1 text-sm font-semibold">
+            <SiteLink href="/mint" className="eth-link mt-4 flex items-center gap-1 text-sm font-semibold">
               Start here <ArrowRight size={13} />
-            </Link>
+            </SiteLink>
           </div>
           <div className="eth-card eth-card-hover flex flex-col p-6">
             <Sparkles size={20} className="text-amber-300" />
@@ -169,9 +169,9 @@ export default function FoundationPage() {
             <p className="mt-1 flex-1 text-sm text-zinc-400">
               Join the top-10 validator leaderboard and share the decaying reward pool.
             </p>
-            <Link href="/dashboard" className="eth-link mt-4 flex items-center gap-1 text-sm font-semibold">
+            <SiteLink href="/dashboard" className="eth-link mt-4 flex items-center gap-1 text-sm font-semibold">
               Open dashboard <ArrowRight size={13} />
-            </Link>
+            </SiteLink>
           </div>
           <div className="eth-card eth-card-hover flex flex-col p-6">
             <Handshake size={20} className="text-emerald-300" />

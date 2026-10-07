@@ -2,6 +2,7 @@ import { ArrowRight, Compass, ExternalLink, Flame, Globe, Landmark, Repeat, Shie
 import Link from "next/link";
 import DomainSearch from "@/components/DomainSearch";
 import Reveal from "@/components/Reveal";
+import SiteLink from "@/components/SiteLink";
 import TokenEmblem from "@/components/TokenEmblem";
 import MiniExplorer from "@/components/MiniExplorer";
 import SiteLanding from "@/components/SiteLanding";
@@ -72,12 +73,12 @@ export default async function Home({
           >
             Mint yours free
           </Link>
-          <Link
+          <SiteLink
             href="/explorer"
             className="eth-btn border border-white/15 px-7 py-3 text-zinc-200 hover:border-white/35 hover:text-white"
           >
             Explore the chain <ArrowRight size={15} />
-          </Link>
+          </SiteLink>
         </Reveal>
 
         <Reveal delay={0.4}>

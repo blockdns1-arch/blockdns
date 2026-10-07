@@ -21,7 +21,8 @@ export async function middleware(req: NextRequest) {
   if (hostedSite) {
     const allowed =
       (hostedSite === "/explorer" && pathname.startsWith("/explorer")) ||
-      (hostedSite === "/foundation" && pathname.startsWith("/foundation")) ||
+      (hostedSite === "/foundation" &&
+        (pathname.startsWith("/foundation") || pathname.startsWith("/whitepaper"))) ||
       (hostedSite === "/swap" &&
         (pathname.startsWith("/swap") ||
           pathname.startsWith("/bridge") ||
@@ -55,7 +56,7 @@ export async function middleware(req: NextRequest) {
       port === "3001"
         ? pathname.startsWith("/explorer")
         : port === "3002"
-          ? pathname.startsWith("/foundation")
+          ? pathname.startsWith("/foundation") || pathname.startsWith("/whitepaper")
           : pathname.startsWith("/swap") ||
             pathname.startsWith("/bridge") ||
             pathname.startsWith("/staking");

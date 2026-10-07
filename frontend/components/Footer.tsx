@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Send, MessageCircle, Music2, Mail } from "lucide-react";
+import SiteLink from "@/components/SiteLink";
 import TokenEmblem from "@/components/TokenEmblem";
 import { BLOCKDNS_CHAIN_ID } from "@/lib/chains";
 
@@ -77,13 +78,13 @@ export default function Footer() {
                 {col.title}
               </p>
               {col.links.map((l) => (
-                <Link
+                <SiteLink
                   key={l.href}
                   href={l.href}
                   className="w-fit text-sm text-zinc-400 transition-colors hover:text-white"
                 >
                   {l.label}
-                </Link>
+                </SiteLink>
               ))}
             </nav>
           ))}
