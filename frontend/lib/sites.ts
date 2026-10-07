@@ -107,6 +107,7 @@ const BASE: Record<SiteId, Omit<SiteConfig, "domain">> = {
     nav: [
       { href: "/swap", label: "Swap" },
       { href: "/bridge", label: "Bridge" },
+      { href: "/staking", label: "Stake" },
     ],
     hero: {
       eyebrow: "On-chain DEX on Base Sepolia",

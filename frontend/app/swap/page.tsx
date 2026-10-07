@@ -5,7 +5,7 @@ import { ArrowDownUp, Coins, RefreshCw, ShieldCheck } from "lucide-react";
 import { formatEther, parseEther } from "viem";
 import { useAccount, useBalance } from "wagmi";
 import { useSwap } from "@/hooks/useSwap";
-import { formatBDNS, txLink } from "@/lib/constants";
+import { BDNS_ADDRESS, formatBDNS, txLink } from "@/lib/constants";
 
 export default function SwapPage() {
   const {
@@ -29,7 +29,7 @@ export default function SwapPage() {
   });
   const { data: bdnsBalanceData, refetch: refetchBdn } = useBalance({
     address,
-    token: "0x5FbDB2315678afecb367f032d93F642f64180aa3" as `0x${string}`,
+    token: BDNS_ADDRESS,
   });
   const ethBalance = ethBalanceData?.value ?? 0n;
   const bdnsBalance = bdnsBalanceData?.value ?? 0n;

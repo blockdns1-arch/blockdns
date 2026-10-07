@@ -22,7 +22,10 @@ export async function middleware(req: NextRequest) {
     const allowed =
       (hostedSite === "/explorer" && pathname.startsWith("/explorer")) ||
       (hostedSite === "/foundation" && pathname.startsWith("/foundation")) ||
-      (hostedSite === "/swap" && (pathname.startsWith("/swap") || pathname.startsWith("/bridge")));
+      (hostedSite === "/swap" &&
+        (pathname.startsWith("/swap") ||
+          pathname.startsWith("/bridge") ||
+          pathname.startsWith("/staking")));
 
     if (pathname === "/") {
       const rewriteUrl = req.nextUrl.clone();
@@ -53,7 +56,9 @@ export async function middleware(req: NextRequest) {
         ? pathname.startsWith("/explorer")
         : port === "3002"
           ? pathname.startsWith("/foundation")
-          : pathname.startsWith("/swap") || pathname.startsWith("/bridge");
+          : pathname.startsWith("/swap") ||
+            pathname.startsWith("/bridge") ||
+            pathname.startsWith("/staking");
     if (allowed) return NextResponse.next();
     return NextResponse.redirect(new URL(siteHome[port], home[port]));
   }
@@ -65,6 +70,7 @@ export async function middleware(req: NextRequest) {
   if (pathname.startsWith("/foundation")) return to(FOUNDATION);
   if (pathname.startsWith("/swap") || pathname.startsWith("/bridge"))
     return to(SWAP);
+  if (pathname.startsWith("/staking")) return to(SWAP);
   if (pathname.startsWith("/whitepaper"))
     return NextResponse.redirect(`${MAIN}/#whitepaper`);
 

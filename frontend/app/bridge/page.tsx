@@ -5,7 +5,7 @@ import { ArrowRightLeft, Landmark, RefreshCw, ShieldCheck } from "lucide-react";
 import { parseEther } from "viem";
 import { useAccount, useBalance } from "wagmi";
 import { useBridge } from "@/hooks/useBridge";
-import { formatBDNS, txLink } from "@/lib/constants";
+import { BDNS_ADDRESS, formatBDNS, txLink } from "@/lib/constants";
 
 export default function BridgePage() {
   const {
@@ -28,7 +28,7 @@ export default function BridgePage() {
   const { address } = useAccount();
   const { data: bdnsBalanceData, refetch: refetchBdn } = useBalance({
     address,
-    token: "0x5FbDB2315678afecb367f032d93F642f64180aa3" as `0x${string}`,
+    token: BDNS_ADDRESS,
   });
   const bdnsBalance = bdnsBalanceData?.value ?? 0n;
 
