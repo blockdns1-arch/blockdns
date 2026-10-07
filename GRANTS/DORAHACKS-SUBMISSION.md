@@ -41,13 +41,11 @@ not published yet. Re-check `/bounties` before submitting and target the matchin
 
 | URL | What it shows | Status |
 | --- | --- | --- |
-| https://blockdns-home.vercel.app | Mint, marketplace, dashboard, whitepaper | live (stale build) |
-| https://blockdns-explorer.vercel.app | Blocks, transactions, contract labels | **404 — redeploy** |
-| https://blockdns-swap.vercel.app | ETH ⇄ BDNS swap and L2 bridge | **404 — redeploy** |
-| https://blockdns-founder.vercel.app | Treasury, governance, grants | **404 — redeploy** |
+| https://blockdns-home.vercel.app | Mint, marketplace, dashboard, whitepaper | live |
+| https://blockdns-explorer.vercel.app | Blocks, transactions, contract labels | live |
+| https://blockdns-swap.vercel.app | ETH ⇄ BDNS swap and L2 bridge | live |
+| https://blockdns-founder.vercel.app | Treasury, governance, grants | live |
 | https://sepolia.basescan.org | Verified source for all 15 contracts | live |
-
-Remove the three 404 rows before submitting, and remove the "stale build" note.
 
 ---
 
@@ -113,7 +111,8 @@ wallets, so a single name carries both identity and asset control.
 Base Sepolia needs test ETH. Say so on camera, and have the funded wallet ready.
 
 1. **Home** (https://blockdns-home.vercel.app) — connect wallet, show the network badge says Base
-   Sepolia. Mint `demouplk.bdns`. Open Basescan on the same token to prove source verification.
+   Sepolia. Mint a fresh name (e.g. `judge2026.bdns`), then search `blockdns.bdns` and open its live
+   site record. Open Basescan on the same token to prove source verification.
 2. **Explorer** (https://blockdns-explorer.vercel.app) — search a transaction hash, show it decoded
    against the verified ABI, and show a name resolving to owner + content hash + bound wallets.
 3. **Swap** (https://blockdns-swap.vercel.app) — swap ETH for BDNS, then start a bridge to the L2.
@@ -130,12 +129,12 @@ Keep every claim on-screen: no slide says "verified" unless Basescan is open nex
 | Time | Content |
 | --- | --- |
 | 0:00-0:20 | Problem: a name you do not own is a promise someone else can break |
-| 0:20-1:10 | Mint `demouplk.bdns`, open Basescan, show verified source |
+| 0:20-1:10 | Mint a fresh `.bdns` name, search `blockdns.bdns`, open Basescan, show verified source |
 | 1:10-1:50 | Explorer: resolve the name, read owner, content hash, bound wallets |
 | 1:50-2:30 | Swap ETH for BDNS, list on the marketplace, stake |
 | 2:30-3:00 | Why the legal framing matters, and what feedback would help |
 
-Re-record after the three redeploys land. Host on YouTube unlisted or Loom, paste the link.
+Record against the four live URLs. Host on YouTube unlisted or Loom, paste the link.
 
 ## 6. Cover image
 
@@ -156,14 +155,12 @@ No fake screenshots: use a capture of the live explorer with a real block number
 
 ## 8. Before you submit
 
-- [ ] Push the merged main branch. Local is 8 commits ahead of `origin/main` and the push failed on
-      missing credentials; run `gh auth login` in your own terminal.
-- [ ] Redeploy all four Vercel projects from the merged main. `swap`, `explorer` and `finder` return
-      404 today.
-- [ ] Confirm all four sites load without a login. The team password gate was removed from
-      `frontend/middleware.ts`, so only Vercel deployment protection can hide them.
-- [ ] Confirm Vercel deployment protection is off, or the links 401.
+- [x] Push the merged main branch (`e2ea25d` on `origin/main`).
+- [x] Redeploy all four Vercel projects from the merged main — all four return 200 today.
+- [x] Confirm all four sites load without a login. The team password gate was removed from
+      `frontend/middleware.ts`, and Vercel deployment protection was cleared via the API.
+- [x] Confirm Vercel deployment protection is off, or the links 401.
 - [ ] Rotate the Etherscan API key that was pasted in plaintext. Re-verify if the old one is revoked.
-- [ ] Record the video after the redeploys, then fill in the demo links table with the four live URLs.
+- [ ] Record the video, then fill in the demo links table with the four live URLs.
 - [ ] Re-check `/bounties` and `/detail` for judging criteria and any new bounty.
 - [ ] Screenshot the Talent Protocol score once it re-indexes: https://talentprotocol.com/score/0x953BaA88c280df9e59C149BC5aB9B9ec64E45323?github=blockdns1-arch

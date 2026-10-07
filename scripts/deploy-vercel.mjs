@@ -210,21 +210,45 @@ function protectionIssue(project) {
   return "";
 }
 
-function disableProtection(id) {
-  // Deployment Protection is disabled by clearing every protection field.
-  return call("PATCH", `/v9/projects/${id}`, {
-    query: { skipAutoDetectionConfirmation: "1" },
-    body: { ssoProtection: null, oidc: null, passwordProtection: null },
-  });
+async function disableProtection(id) {
+  // Deployment Protection is disabled by clearing every protection field. Schema
+  // support differs across API versions: v9 rejects `oidc` as an unknown property,
+  // so fall back to progressively smaller bodies until one is accepted.
+  const attempts = [
+    { version: "v10", body: { ssoProtection: null, oidc: null, passwordProtection: null } },
+    { version: "v9", body: { ssoProtection: null, passwordProtection: null } },
+    { version: "v9", body: { ssoProtection: null } },
+  ];
+  let lastError;
+  for (const { version, body } of attempts) {
+    try {
+      return await call("PATCH", `/${version}/projects/${id}`, {
+        query: { skipAutoDetectionConfirmation: "1" },
+        body,
+      });
+    } catch (error) {
+      lastError = error;
+      if (error?.status !== 400 && error?.status !== 404) throw error;
+    }
+  }
+  throw lastError;
 }
 
 async function createProject(site) {
+  // `link` is rejected on create ("should NOT have additional property `link`"), so
+  // the repository is attached afterwards through the dedicated endpoint.
   return call("POST", "/v10/projects", {
     body: {
       name: site.project,
       ...PROJECT_SETTINGS,
-      link: { type: "github", repo: GITHUB_REPO, productionBranch: BRANCH },
     },
+  });
+}
+
+async function linkProject(id) {
+  // Connects the GitHub repository so every push to main redeploys the project.
+  return call("POST", `/v10/projects/${id}/link`, {
+    body: { type: "github", repo: GITHUB_REPO, productionBranch: BRANCH },
   });
 }
 
@@ -254,13 +278,32 @@ async function syncEnv(id, desired) {
   }
 }
 
-async function deploy(id, site) {
+// The deployments API rejects a bare repository name: it needs the numeric
+// repository id plus the owner (org) id. Take them from whichever project is
+// already linked to GitHub, and fall back to this repository's known ids.
+async function gitSourceFor() {
+  for (const site of SITES) {
+    try {
+      const link = (await findProject(site.project))?.link;
+      if (link?.repoId) return { repoId: link.repoId, orgId: link.orgId ?? link.repoOwnerId };
+    } catch {
+      // a project that is missing or unreadable just means "not linked yet"
+    }
+  }
+  return {
+    repoId: Number(process.env.VERCEL_GIT_REPO_ID || 1395216887),
+    orgId: Number(process.env.VERCEL_GIT_ORG_ID || 335220200),
+  };
+}
+
+async function deploy(id, site, project) {
+  const gitSource = { type: "github", repo: GITHUB_REPO, ref: BRANCH, ...(await gitSourceFor()) };
   const created = await call("POST", "/v13/deployments", {
     body: {
       name: site.project,
       project: id,
       target: "production",
-      gitSource: { type: "github", repo: GITHUB_REPO, ref: BRANCH },
+      gitSource,
     },
   });
 
@@ -377,6 +420,10 @@ async function main() {
     if (!DRY_RUN) {
       if (!created) await updateProject(project.id);
       await syncEnv(project.id, env);
+      if (!project.link) {
+        await linkProject(project.id);
+        console.log("  linked GitHub repository");
+      }
     } else {
       console.log(`  would sync env: ${Object.keys(env).length} vars (NEXT_PUBLIC_SITE=${site.site}, ${Object.keys(ADDRESS_ENV).length} addresses)`);
     }
@@ -404,7 +451,7 @@ async function main() {
       continue;
     }
 
-    const result = await deploy(project.id, site);
+    const result = await deploy(project.id, site, project);
     if (result.status === "READY") {
       const url = `https://${result.url.replace(/^https?:\/\//, "")}`;
       console.log(`  deployed: ${url}`);
