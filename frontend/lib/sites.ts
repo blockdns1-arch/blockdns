@@ -237,7 +237,7 @@ const ROUTE_OWNERS: { prefix: string; site: SiteId }[] = [
   { prefix: "/bridge", site: "swap" },
   { prefix: "/staking", site: "swap" },
   { prefix: "/foundation", site: "founder" },
-  { prefix: "/whitepaper", site: "founder" },
+  { prefix: "/whitepaper", site: "home" },
   { prefix: "/mint", site: "home" },
   { prefix: "/dashboard", site: "home" },
   { prefix: "/market", site: "home" },
